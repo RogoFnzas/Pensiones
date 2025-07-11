@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Financiero</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            /* Fondo degradado - Se mantiene el mismo estilo */
+            background: linear-gradient(135deg, #ff7f50, #1e90ff); 
+            color: #ffffff;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh; 
+        }
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            width: 100%; 
+            box-sizing: border-box; 
+        }
+        header h1 {
+            margin: 0;
+        }
+        
+        /* Estilos para el menú de navegación VERTICAL */
+        nav {
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 10px; 
+            padding: 15px; 
+            background-color: rgba(0, 0, 0, 0.7); 
+            max-width: 300px; 
+            width: 90%; 
+            margin: 20px auto; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); 
+        }
+        nav a {
+            text-decoration: none;
+            color: #ffffff; 
+            font-weight: bold;
+            display: block; 
+            padding: 10px 20px; 
+            width: calc(100% - 40px); 
+            text-align: center; 
+            background-color: rgba(255, 255, 255, 0.1); 
+            border-radius: 5px; 
+            transition: background-color 0.3s ease; 
+        }
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.25); 
+        }
+
+        /* Estilos de color para clases específicas */
+        .rojo {
+            color: red; 
+        }
+        .azul {
+            color: blue; 
+        }
+
+        /* Estilos para el botón de regreso */
+        .btn-regresar {
+            display: inline-block;
+            margin-top: 30px; /* Espacio superior para separarlo del contenido */
+            padding: 12px 25px;
+            background-color: #007bff; /* Color azul para el botón */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra para el botón */
+        }
+
+        .btn-regresar:hover {
+            background-color: #0056b3; /* Color azul más oscuro al pasar el ratón */
+            transform: translateY(-2px); /* Pequeño efecto de levantamiento */
+        }
+        
+        /* Media queries para pantallas más pequeñas */
+        @media (max-width: 600px) {
+            nav {
+                padding: 10px;
+                gap: 8px;
+            }
+            nav a {
+                padding: 8px 15px;
+                font-size: 0.9em;
+                width: calc(100% - 30px);
+            }
+            .btn-regresar {
+                padding: 10px 20px; /* Ajusta el padding para pantallas pequeñas */
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Cálculos Financieros Cronos</h1>
+        <h2>Financiero ROGO v.1.0</h2>
+    </header>
+
+    <nav>
+        <a href="InvInteresCompuesto.html" class="rojo">Inv. Interés Compuesto</a>
+        <a href="ValorPresente.html" class="rojo">Valor Presente</a>
+        <a href="TiempoAhorro.html" class="rojo">Tiempo en Ahorro IC</a>
+        <a href="Regla72.html" class="rojo">Regla del 72 </a>
+        <a href="GAT.html" class="rojo">Ganancia Anual Total</a>
+        <a href="WarrenBuffett.html" class="rojo">Warren Buffett</a>
+        <a href="index.html" class="rojo">Menú Principal</a>
+    </nav>
+
+</body>
+</html>

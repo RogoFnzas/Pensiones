@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Pensión IMSS Ley 73</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e6f2ef; /* Color institucional IMSS */
+      color: #003c2b;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #00664f;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .salarios {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .buttons button {
+      padding: 10px 20px;
+      margin: 10px 5px;
+      background-color: #00664f;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .resultado {
+      margin-top: 20px;
+      background-color: #f0f9f6;
+      padding: 15px;
+      border-left: 5px solid #00664f;
+    }
+  </style>
+</head>
+<body>
+  <h1>Calculadora de Pensión - IMSS Ley 73</h1>
+  <div class="container">
+    <label for="ingreso">Año de ingreso al IMSS:</label>
+    <select id="ingreso"></select>
+
+    <label for="edad">Edad actual:</label>
+    <select id="edad"></select>
+
+    <label for="semanas">Semanas cotizadas:</label>
+    <input type="number" id="semanas" min="500" max="4200">
+
+    <label>Tipo de cálculo:</label>
+    <input type="radio" name="tipo" value="1" checked> Solo trabajador<br>
+    <input type="radio" name="tipo" value="2"> Trabajador y esposa<br>
+    <input type="radio" name="tipo" value="3"> Trabajador, esposa e hijos
+
+    <label>Años y Salarios promedio mensuales:</label>
+    <div class="salarios">
+      <input type="number" id="anio1" placeholder="Año 1">
+      <input type="text" id="salario1" placeholder="Salario 1">
+      <input type="number" id="anio2" placeholder="Año 2">
+      <input type="text" id="salario2" placeholder="Salario 2">
+      <input type="number" id="anio3" placeholder="Año 3">
+      <input type="text" id="salario3" placeholder="Salario 3">
+      <input type="number" id="anio4" placeholder="Año 4">
+      <input type="text" id="salario4" placeholder="Salario 4">
+      <input type="number" id="anio5" placeholder="Año 5">
+      <input type="text" id="salario5" placeholder="Salario 5">
+    </div>
+
+    <div class="buttons">
+      <button onclick="calcularPension()">Calcular</button>
+      <button onclick="generarPDF()">Generar PDF</button>
+      <button onclick="generarCSV()">Generar CSV</button>
+      <button onclick="reiniciarFormulario()">Limpiar</button>
+    </div>
+
+    <div id="resultado" class="resultado" style="display:none"></div>
+  </div>
+
+  <script>
+    const anioActual = new Date().getFullYear();
+    for (let i = anioActual; i >= 1940; i--) {
+      const option = document.createElement("option");
+      option.value = i;
+      option.text = i;
+      document.getElementById("ingreso").appendChild(option);
+    }
+
+    for (let i = 99; i >= 16; i--) {
+      const option = document.createElement("option");
+      option.value = i;
+      option.text = i;
+      document.getElementById("edad").appendChild(option);
+    }
+
+    function calcularPension() {
+      const semanas = parseInt(document.getElementById("semanas").value);
+      const tipo = document.querySelector('input[name="tipo"]:checked').value;
+
+      const salarios = [];
+      for (let i = 1; i <= 5; i++) {
+        const anio = parseInt(document.getElementById("anio" + i).value);
+        const salario = parseFloat(document.getElementById("salario" + i).value.replace(/,/g, ''));
+
+        if (!anio || anio > anioActual || anio < 1940) {
+          alert("Año inválido en línea " + i);
+          return;
+        }
+        if (isNaN(salario) || salario <= 0) {
+          alert("Salario inválido en línea " + i);
+          return;
+        }
+        salarios.push(salario);
+      }
+
+      const promedio = salarios.reduce((a, b) => a + b, 0) / salarios.length;
+
+      let cuantiaBasica = 3407.25;
+      let incrementoPorSemana = 13.15;
+      let semanasExcedentes = Math.max(0, semanas - 500);
+      let cuantiaTotal = cuantiaBasica + (semanasExcedentes * incrementoPorSemana);
+      let importe = cuantiaTotal * (promedio / 8600);
+
+      if (tipo === "2") importe *= 1.0;
+      if (tipo === "3") importe *= 1.17;
+
+      document.getElementById("resultado").innerHTML = `
+        <strong>Tipo de Pensión:</strong> Vejez<br>
+        <strong>Semanas cotizadas:</strong> ${semanas}<br>
+        <strong>Salario Promedio Mensual:</strong> $${promedio.toLocaleString()}<br>
+        <strong>Porcentaje Cuantía:</strong> 100%<br>
+        <strong>Importe de Pensión:</strong> $${importe.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      `;
+      document.getElementById("resultado").style.display = "block";
+    }
+
+    function generarPDF() {
+      alert("Función de PDF aún no implementada.");
+    }
+
+    function generarCSV() {
+      alert("Función de CSV aún no implementada.");
+    }
+
+    function reiniciarFormulario() {
+      document.getElementById("ingreso").selectedIndex = 0;
+      document.getElementById("edad").selectedIndex = 0;
+      document.getElementById("semanas").value = "";
+      for (let i = 1; i <= 5; i++) {
+        document.getElementById("anio" + i).value = "";
+        document.getElementById("salario" + i).value = "";
+      }
+      document.getElementById("resultado").style.display = "none";
+    }
+  </script>
+</body>
+</html>

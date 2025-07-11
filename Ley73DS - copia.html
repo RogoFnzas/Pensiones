@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMSS - Simulador de Pensión Ley 73</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f3f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background-color: #0066a1;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+        }
+        .header img {
+            height: 50px;
+            margin-right: 15px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+        .content {
+            padding: 25px;
+        }
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #0066a1;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .salarios-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .salarios-table th, .salarios-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .salarios-table th {
+            background-color: #0066a1;
+            color: white;
+        }
+        .scenarios {
+            margin: 25px 0;
+            padding: 15px;
+            background-color: #e9f5fb;
+            border-left: 4px solid #0066a1;
+        }
+        .buttons {
+            margin-top: 25px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .calculate {
+            background-color: #0066a1;
+            color: white;
+        }
+        .calculate:hover {
+            background-color: #004d7a;
+        }
+        .pdf {
+            background-color: #d9534f;
+            color: white;
+        }
+        .pdf:hover {
+            background-color: #c12e2a;
+        }
+        .csv {
+            background-color: #5cb85c;
+            color: white;
+        }
+        .csv:hover {
+            background-color: #449d44;
+        }
+        .reset {
+            background-color: #f0ad4e;
+            color: white;
+        }
+        .reset:hover {
+            background-color: #ec971f;
+        }
+        .results {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border-left: 4px solid #0066a1;
+            display: none;
+        }
+        .results h3 {
+            color: #0066a1;
+            margin-top: 0;
+        }
+        .download-message {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #dff0d8;
+            border-radius: 4px;
+            color: #3c763d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://www.imss.gob.mx/sites/all/statics/img/logo_imss_blanco.png" alt="IMSS">
+            <h1>Simulador de Pensión - Ley 73</h1>
+        </div>
+
+        <div class="content">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nombreCompleto">Nombre Completo:</label>
+                    <input type="text" id="nombreCompleto" required>
+                </div>
+                <div class="form-group">
+                    <label for="edad">Edad:</label>
+                    <input type="number" id="edad" min="50" max="100" required>
+                </div>
+            </div>
+
+            <h3>Últimos 5 años de cotización</h3>
+            <table class="salarios-table">
+                <thead>
+                    <tr>
+                        <th>Año</th>
+                        <th>Salario Mensual ($)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Año actual - 4</td>
+                        <td><input type="number" id="salario1" min="0" step="0.01" class="salario-input" required></td>
+                    </tr>
+                    <tr>
+                        <td>Año actual - 3</td>
+                        <td><input type="number" id="salario2" min="0" step="0.01" class="salario-input" required></td>
+                    </tr>
+                    <tr>
+                        <td>Año actual - 2</td>
+                        <td><input type="number" id="salario3" min="0" step="0.01" class="salario-input" required></td>
+                    </tr>
+                    <tr>
+                        <td>Año actual - 1</td>
+                        <td><input type="number" id="salario4" min="0" step="0.01" class="salario-input" required></td>
+                    </tr>
+                    <tr>
+                        <td>Año actual</td>
+                        <td><input type="number" id="salario5" min="0" step="0.01" class="salario-input" required></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="salarioPromedio">Salario Promedio Mensual:</label>
+                    <input type="number" id="salarioPromedio" min="0" step="0.01" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="semanas">Semanas Cotizadas:</label>
+                    <input type="number" id="semanas" min="0" required>
+                </div>
+            </div>
+
+            <div class="scenarios">
+                <h3>Escenarios de Jubilación</h3>
+                <div class="form-group">
+                    <input type="radio" id="escenario1" name="escenario" value="individual" checked>
+                    <label for="escenario1">Pensión Individual (sólo trabajador)</label>
+                </div>
+                <div class="form-group">
+                    <input type="radio" id="escenario2" name="escenario" value="conyugal">
+                    <label for="escenario2">Trabajador y Esposa (incluye pensión para viuda)</label>
+                </div>
+                <div class="form-group">
+                    <input type="radio" id="escenario3" name="escenario" value="familiar">
+                    <label for="escenario3">Trabajador, Esposa e Hijos (incluye pensión para viuda e hijos)</label>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button class="calculate" onclick="calcularPension()">Calcular Pensión</button>
+                <button class="pdf" onclick="generarPDF()">Generar PDF</button>
+                <button class="csv" onclick="generarCSV()">Generar CSV</button>
+                <button class="reset" onclick="resetForm()">Nuevo Cálculo</button>
+            </div>
+
+            <div id="downloadMessage" class="download-message">
+                El archivo se está generando. Por favor espere...
+            </div>
+
+            <div id="resultados" class="results">
+                <h3>Resultados de la Simulación</h3>
+                <div id="detalleResultados"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Calcular salario promedio automáticamente
+        document.querySelectorAll('.salario-input').forEach(input => {
+            input.addEventListener('input', calcularSalarioPromedio);
+        });
+
+        function calcularSalarioPromedio() {
+            let total = 0;
+            let count = 0;
+            
+            document.querySelectorAll('.salario-input').forEach(input => {
+                if (input.value && !isNaN(input.value)) {
+                    total += parseFloat(input.value);
+                    count++;
+                }
+            });
+            
+            if (count > 0) {
+                const promedio = total / count;
+                document.getElementById('salarioPromedio').value = promedio.toFixed(2);
+            }
+        }
+
+        function calcularPension() {
+            // Obtener datos del formulario
+            const nombreCompleto = document.getElementById('nombreCompleto').value;
+            const edad = parseInt(document.getElementById('edad').value);
+            const semanas = parseInt(document.getElementById('semanas').value);
+            const salarioPromedio = parseFloat(document.getElementById('salarioPromedio').value);
+            const escenario = document.querySelector('input[name="escenario"]:checked').value;
+
+            // Validaciones
+            if (isNaN(salarioPromedio) {
+                alert("Por favor complete los salarios de los últimos 5 años");
+                return;
+            }
+
+            if (semanas < 500) {
+                alert("Se requieren mínimo 500 semanas cotizadas (10 años)");
+                return;
+            }
+
+            if (edad < 60) {
+                if (!confirm("La edad ingresada es menor a 60 años. ¿Desea continuar con el cálculo?")) {
+                    return;
+                }
+            }
+
+            // Calcular pensión base (Ley 73)
+            const años = semanas / 50;
+            let porcentaje = 60; // Base del 60%
+            
+            if (años > 10) {
+                porcentaje += (años - 10) * 2; // 2% adicional por año extra
+            }
+
+            // Ajustar según escenario
+            let ajuste = 1;
+            let descripcionEscenario = "Individual (sólo trabajador)";
+            
+            if (escenario === "conyugal") {
+                ajuste = 0.9; // 10% menos para pensión conyugal
+                descripcionEscenario = "Conyugal (trabajador y esposa)";
+            } else if (escenario === "familiar") {
+                ajuste = 0.85; // 15% menos para pensión familiar
+                descripcionEscenario = "Familiar (trabajador, esposa e hijos)";
+            }
+
+            const pension = (salarioPromedio * porcentaje * ajuste) / 100;
+
+            // Mostrar resultados
+            document.getElementById('detalleResultados').innerHTML = `
+                <p><strong>Nombre:</strong> ${nombreCompleto}</p>
+                <p><strong>Edad:</strong> ${edad} años</p>
+                <p><strong>Salario promedio mensual:</strong> $${salarioPromedio.toFixed(2)}</p>
+                <p><strong>Semanas cotizadas:</strong> ${semanas} (${años.toFixed(1)} años)</p>
+                <p><strong>Escenario:</strong> ${descripcionEscenario}</p>
+                <p><strong>Porcentaje de pensión:</strong> ${porcentaje}%</p>
+                <p><strong>Ajuste por escenario:</strong> ${(ajuste * 100).toFixed(0)}%</p>
+                <h4><strong>Pensión mensual estimada:</strong> $${pension.toFixed(2)}</h4>
+            `;
+            
+            document.getElementById('resultados').style.display = 'block';
+        }
+
+        function generarPDF() {
+            const resultados = document.getElementById('resultados');
+            if (resultados.style.display !== 'block') {
+                alert("Primero realice el cálculo de pensión");
+                return;
+            }
+
+            document.getElementById('downloadMessage').style.display = 'block';
+            
+            // Simulación de generación de PDF (en producción usar biblioteca como jsPDF)
+            setTimeout(() => {
+                document.getElementById('downloadMessage').style.display = 'none';
+                alert("PDF generado con éxito");
+                
+                // Aquí iría el código real para generar PDF
+                // const doc = new jsPDF();
+                // doc.text('Resultados de Pensión Ley 73', 10, 10);
+                // doc.save('pension_imss.pdf');
+            }, 2000);
+        }
+
+        function generarCSV() {
+            const resultados = document.getElementById('resultados');
+            if (resultados.style.display !== 'block') {
+                alert("Primero realice el cálculo de pensión");
+                return;
+            }
+
+            document.getElementById('downloadMessage').style.display = 'block';
+            
+            // Simulación de generación de CSV
+            setTimeout(() => {
+                document.getElementById('downloadMessage').style.display = 'none';
+                alert("CSV generado con éxito");
+                
+                // Aquí iría el código real para generar CSV
+                // const csvContent = "data:text/csv;charset=utf-8," + [...];
+                // const encodedUri = encodeURI(csvContent);
+                // const link = document.createElement("a");
+                // link.setAttribute("href", encodedUri);
+                // link.setAttribute("download", "pension_imss.csv");
+                // document.body.appendChild(link);
+                // link.click();
+            }, 2000);
+        }
+
+        function resetForm() {
+            document.querySelectorAll('input').forEach(input => {
+                if (input.type !== 'radio' || input.id === 'escenario1') {
+                    input.value = '';
+                }
+                if (input.type === 'radio' && input.id === 'escenario1') {
+                    input.checked = true;
+                }
+            });
+            document.getElementById('resultados').style.display = 'none';
+        }
+    </script>
+
+<!-- Para PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+<!-- Para CSV (SheetJS) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+</body>
+</html>

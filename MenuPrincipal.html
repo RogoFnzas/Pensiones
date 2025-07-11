@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú de Calculadoras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .menu {
+            margin-bottom: 20px;
+        }
+        .menu select {
+            padding: 10px;
+            font-size: 16px;
+        }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Menú de Calculadoras</h1>
+
+    <div class="menu">
+        <label for="opciones">Selecciona una opción:</label>
+        <select id="opciones" onchange="cargarPagina()">
+            <option value="">-- Selecciona --</option>
+            <option value="InvInteresCompuesto.html">1. Inversión con Interés Compuesto</option>
+            <option value="ValorPresente.html">2. Valor Presente</option>
+            <option value="TiempoAhorro.html">3. Tiempo Ahorro con Interés Compuesto</option>
+        </select>
+    </div>
+
+    <iframe id="contenido" src="" title="Contenido del marco"></iframe>
+
+    <script>
+        function cargarPagina() {
+            var seleccion = document.getElementById('opciones').value;
+            if (seleccion) {
+                document.getElementById('contenido').src = seleccion;
+            }
+        }
+    </script>
+
+</body>
+</html>

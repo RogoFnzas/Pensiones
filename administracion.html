@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Administración Cronos</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(145deg, #1e3c72, #2a5298);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 100vh;
+      text-align: center;
+    }
+
+    header {
+      padding: 2rem;
+    }
+
+    header h1 {
+      font-size: 2.3rem;
+      margin: 0;
+    }
+
+    header h2 {
+      font-weight: 300;
+      font-size: 1.1rem;
+      margin-top: 0.5rem;
+    }
+
+    nav {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      margin-top: 1rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: white;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 0.8rem 2rem;
+      border-radius: 10px;
+      font-size: 1.2rem;
+      transition: background 0.3s ease;
+    }
+
+    nav a:hover {
+      background-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .regresar {
+      margin: 2rem 0 0;
+    }
+
+    .regresar a {
+      text-decoration: none;
+      color: white;
+      background-color: rgba(0, 0, 0, 0.3);
+      padding: 0.6rem 1.5rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: background 0.3s ease;
+    }
+
+    .regresar a:hover {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    footer {
+      padding: 1.5rem;
+      font-style: italic;
+      font-size: 0.95rem;
+      background-color: rgba(0, 0, 0, 0.2);
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Administración Cronos</h1>
+    <h2>Financiero ROGO v.1.0</h2>
+  </header>
+
+  <nav>
+    <a href="roles.html">Roles</a>
+    <a href="usuarios.html">Usuarios</a>
+    <a href="prospectos.html">Prospectos</a>
+    <a href="pensionados.html">Pensionados</a>
+    <a href="historico-pensionados.html">Histórico Pensionados</a>
+    <a href="clientes.html">Clientes</a>
+  </nav>
+
+  <div class="regresar">
+    <a href="index.html">← Regresar al Inicio</a>
+  </div>
+
+  <footer>
+    "Una buena administración hoy garantiza una pensión digna mañana."
+  </footer>
+
+</body>
+</html>

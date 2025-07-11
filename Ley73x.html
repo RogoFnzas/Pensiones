@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cálculo de Pensión - LEY 73 IMSS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #005883;
+        }
+        .header img {
+            height: 60px;
+            margin-right: 15px;
+        }
+        .header h1 {
+            color: #005883;
+            font-size: 20px;
+            margin: 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #005883;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-row {
+            display: flex;
+            gap: 10px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+        button {
+            background-color: #005883;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #003d5c;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e6f2f8;
+            border-radius: 4px;
+            display: none;
+        }
+        .result h2 {
+            color: #005883;
+            font-size: 18px;
+            margin-top: 0;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .result-label {
+            font-weight: bold;
+            color: #005883;
+        }
+        .result-value {
+            color: #333;
+        }
+        .error {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+        .salario-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        .salario-row input {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://www.imss.gob.mx/sites/all/statics/img/logo-imss.svg" alt="Logo IMSS">
+            <h1>Cálculo de Pensión - LEY 73</h1>
+        </div>
+
+        <form id="pensionForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="anioIngreso">Año en que ingresaste al IMSS</label>
+                    <input type="number" id="anioIngreso" min="1930" max="" required>
+                    <div class="error" id="errorAnioIngreso">El año debe estar entre 1930 y el año actual</div>
+                </div>
+                <div class="form-group">
+                    <label for="edadActual">Edad actual</label>
+                    <input type="number" id="edadActual" min="16" max="99" required>
+                    <div class="error" id="errorEdadActual">La edad debe estar entre 16 y 99 años</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="semanasCotizadas">Semanas cotizadas</label>
+                <input type="number" id="semanasCotizadas" min="500" max="4200" required>
+                <div class="error" id="errorSemanasCotizadas">Las semanas deben estar entre 500 y 4,200</div>
+            </div>
+
+            <div class="form-group">
+                <label>Salario mensual promedio de los últimos 5 años cotizados</label>
+                
+                <div class="salario-row">
+                    <input type="number" id="anio1" placeholder="Año 1" min="1930" max="" required>
+                    <input type="text" id="salario1" placeholder="Salario Promedio Mensual" required>
+                    <div class="error" id="errorAnio1">Año inválido</div>
+                    <div class="error" id="errorSalario1">Salario inválido</div>
+                </div>
+                
+                <div class="salario-row">
+                    <input type="number" id="anio2" placeholder="Año 2" min="1930" max="" required>
+                    <input type="text" id="salario2" placeholder="Salario Promedio Mensual" required>
+                    <div class="error" id="errorAnio2">Año inválido</div>
+                    <div class="error" id="errorSalario2">Salario inválido</div>
+                </div>
+                
+                <div class="salario-row">
+                    <input type="number" id="anio3" placeholder="Año 3" min="1930" max="" required>
+                    <input type="text" id="salario3" placeholder="Salario Promedio Mensual" required>
+                    <div class="error" id="errorAnio3">Año inválido</div>
+                    <div class="error" id="errorSalario3">Salario inválido</div>
+                </div>
+                
+                <div class="salario-row">
+                    <input type="number" id="anio4" placeholder="Año 4" min="1930" max="" required>
+                    <input type="text" id="salario4" placeholder="Salario Promedio Mensual" required>
+                    <div class="error" id="errorAnio4">Año inválido</div>
+                    <div class="error" id="errorSalario4">Salario inválido</div>
+                </div>
+                
+                <div class="salario-row">
+                    <input type="number" id="anio5" placeholder="Año 5" min="1930" max="" required>
+                    <input type="text" id="salario5" placeholder="Salario Promedio Mensual" required>
+                    <div class="error" id="errorAnio5">Año inválido</div>
+                    <div class="error" id="errorSalario5">Salario inválido</div>
+                </div>
+            </div>
+
+            <button type="button" onclick="calcularPension()">Calcular Pensión</button>
+        </form>
+
+        <div class="result" id="resultado">
+            <h2>Resultados del Cálculo</h2>
+            
+            <div class="result-item">
+                <span class="result-label">Tipo de Pensión:</span>
+                <span class="result-value" id="tipoPension">-</span>
+            </div>
+            
+            <div class="result-item">
+                <span class="result-label">Semanas cotizadas:</span>
+                <span class="result-value" id="semanasResultado">0</span>
+            </div>
+            
+            <div class="result-item">
+                <span class="result-label">Salario Promedio Mensual:</span>
+                <span class="result-value" id="salarioPromedio">$0.00</span>
+            </div>
+            
+            <div class="result-item">
+                <span class="result-label">Porcentaje de Cuantía:</span>
+                <span class="result-value" id="porcentajeCuantia">0%</span>
+            </div>
+            
+            <div class="result-item">
+                <span class="result-label">Importe de Pensión:</span>
+                <span class="result-value" id="importePension">$0.00</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Establecer año máximo actual
+        const currentYear = new Date().getFullYear();
+        document.getElementById('anioIngreso').max = currentYear;
+        document.getElementById('anio1').max = currentYear;
+        document.getElementById('anio2').max = currentYear;
+        document.getElementById('anio3').max = currentYear;
+        document.getElementById('anio4').max = currentYear;
+        document.getElementById('anio5').max = currentYear;
+
+        function validarNumero(input, min, max, errorId) {
+            const value = parseInt(input.value);
+            const errorElement = document.getElementById(errorId);
+            
+            if (isNaN(value) || value < min || value > max) {
+                errorElement.style.display = 'block';
+                return false;
+            } else {
+                errorElement.style.display = 'none';
+                return true;
+            }
+        }
+
+        function validarSalario(input, errorId) {
+            const value = input.value.replace(/,/g, '');
+            const numericValue = parseFloat(value);
+            const errorElement = document.getElementById(errorId);
+            
+            if (isNaN(numericValue) || numericValue <= 0) {
+                errorElement.style.display = 'block';
+                return false;
+            } else {
+                // Formatear con comas
+                input.value = numericValue.toLocaleString('es-MX');
+                errorElement.style.display = 'none';
+                return true;
+            }
+        }
+
+        function calcularPension() {
+            // Validar todos los campos
+            let isValid = true;
+            
+            // Validar año ingreso
+            isValid = validarNumero(document.getElementById('anioIngreso'), 1930, currentYear, 'errorAnioIngreso') && isValid;
+            
+            // Validar edad actual
+            isValid = validarNumero(document.getElementById('edadActual'), 16, 99, 'errorEdadActual') && isValid;
+            
+            // Validar semanas cotizadas
+            isValid = validarNumero(document.getElementById('semanasCotizadas'), 500, 4200, 'errorSemanasCotizadas') && isValid;
+            
+            // Validar años y salarios
+            isValid = validarNumero(document.getElementById('anio1'), 1930, currentYear, 'errorAnio1') && isValid;
+            isValid = validarSalario(document.getElementById('salario1'), 'errorSalario1') && isValid;
+            
+            isValid = validarNumero(document.getElementById('anio2'), 1930, currentYear, 'errorAnio2') && isValid;
+            isValid = validarSalario(document.getElementById('salario2'), 'errorSalario2') && isValid;
+            
+            isValid = validarNumero(document.getElementById('anio3'), 1930, currentYear, 'errorAnio3') && isValid;
+            isValid = validarSalario(document.getElementById('salario3'), 'errorSalario3') && isValid;
+            
+            isValid = validarNumero(document.getElementById('anio4'), 1930, currentYear, 'errorAnio4') && isValid;
+            isValid = validarSalario(document.getElementById('salario4'), 'errorSalario4') && isValid;
+            
+            isValid = validarNumero(document.getElementById('anio5'), 1930, currentYear, 'errorAnio5') && isValid;
+            isValid = validarSalario(document.getElementById('salario5'), 'errorSalario5') && isValid;
+            
+            if (!isValid) {
+                return;
+            }
+            
+            // Obtener valores
+            const edad = parseInt(document.getElementById('edadActual').value);
+            const semanasCotizadas = parseInt(document.getElementById('semanasCotizadas').value);
+            
+            // Calcular porcentaje según EDAD (como en tu ejemplo)
+            let porcentaje = 0;
+            if (edad >= 65) porcentaje = 100;
+            else if (edad >= 64) porcentaje = 95;
+            else if (edad >= 63) porcentaje = 90;
+            else if (edad >= 62) porcentaje = 85;
+            else if (edad >= 61) porcentaje = 80;
+            
+            // Calcular salario promedio (simple)
+            const salarios = [
+                parseFloat(document.getElementById('salario1').value.replace(/,/g, '')),
+                parseFloat(document.getElementById('salario2').value.replace(/,/g, '')),
+                parseFloat(document.getElementById('salario3').value.replace(/,/g, '')),
+                parseFloat(document.getElementById('salario4').value.replace(/,/g, '')),
+                parseFloat(document.getElementById('salario5').value.replace(/,/g, ''))
+            ];
+            const salarioPromedio = salarios.reduce((a, b) => a + b, 0) / 5;
+            
+            // Calcular pensión
+            const importePension = (salarioPromedio * porcentaje / 100).toFixed(2);
+            
+            // Determinar tipo de pensión
+            let tipoPension = "Vejez";
+            if (edad < 60) {
+                tipoPension = "Cesantía en edad avanzada";
+            }
+            
+            // Mostrar resultados
+            document.getElementById('tipoPension').textContent = tipoPension;
+            document.getElementById('semanasResultado').textContent = semanasCotizadas;
+            document.getElementById('salarioPromedio').textContent = `$${salarioPromedio.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+            document.getElementById('porcentajeCuantia').textContent = `${porcentaje}%`;
+            document.getElementById('importePension').textContent = `$${importePension.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+            
+            document.getElementById('resultado').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

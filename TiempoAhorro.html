@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Ahorro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0; /* Elimina el margen por defecto del body */
+            display: flex; /* Habilita Flexbox */
+            flex-direction: column; /* Organiza los hijos en columna (header, container, footer) */
+            align-items: center; /* Centra horizontalmente el contenido principal */
+            justify-content: center; /* Centra verticalmente el contenido principal si hay espacio */
+            min-height: 100vh; /* Asegura que el body ocupe al menos toda la altura de la ventana */
+            background-color: #1a0033; /* Fondo púrpura oscuro impactante */
+            color: #f0f0f0; /* Color de texto general blanco/gris claro para contraste */
+        }
+
+        .container {
+            background-color: #333; /* Fondo gris oscuro para la calculadora */
+            padding: 25px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Sombra más pronunciada */
+            width: 90%; /* Ocupa el 90% del ancho disponible */
+            max-width: 550px; /* Ancho máximo para la calculadora para evitar que se extienda demasiado */
+            text-align: center; /* Centra el texto dentro del contenedor */
+            box-sizing: border-box; /* Incluye padding y border en el width/height */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centra los input-groups dentro del container */
+        }
+
+        h1 {
+            text-align: center; /* Centra el título H1 */
+            color: #FFD700; /* Color dorado para el título */
+            margin-bottom: 25px; /* Más espacio debajo del título */
+            font-size: 2em; /* Ajuste de tamaño de fuente */
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px; /* Más espacio entre grupos de entrada */
+            justify-content: space-between; /* Distribuye el espacio entre label e input */
+            width: 100%; /* Asegura que ocupe todo el ancho del contenedor */
+        }
+
+        .input-group label {
+            flex-shrink: 0; /* Evita que la etiqueta se encoja */
+            color: #ADD8E6; /* Azul claro para las leyendas */
+            font-size: 0.95em;
+            text-align: right; /* Alinea el texto de la etiqueta a la derecha */
+            margin-right: 10px;
+            min-width: 150px; /* Ancho mínimo para las etiquetas */
+        }
+
+        .input-group input[type="number"],
+        .input-group input[type="text"] { /* Se incluye text para los input que se formatearán */
+            flex-grow: 1; /* Permite que el input crezca y ocupe el espacio restante */
+            padding: 10px; /* Mayor padding para los campos de entrada */
+            border: 1px solid #ADD8E6; /* Borde azul claro para más visibilidad inicial */
+            border-radius: 5px; /* Ligeramente más redondeado */
+            box-sizing: border-box;
+            background-color: #444; /* Fondo oscuro para los campos de entrada */
+            color: #f0f0f0; /* Texto claro en los campos de entrada */
+            font-size: 1em;
+            min-width: 120px; /* Ancho mínimo para los inputs */
+        }
+
+        /* Estilo específico para el checkbox para que no ocupe todo el ancho */
+        .input-group input[type="checkbox"] {
+            width: auto; /* Ancho automático para el checkbox */
+            flex-grow: 0; /* No crece */
+            margin-left: auto; /* Empuja el checkbox a la derecha */
+            transform: scale(1.2); /* Hace el checkbox un poco más grande */
+        }
+
+        /* ESTILO PARA LOS CAMPOS CUANDO ESTÁN EN FOCO */
+        .input-group input[type="number"]:focus,
+        .input-group input[type="text"]:focus {
+            outline: none; /* Elimina el contorno predeterminado del navegador */
+            border-color: #FFD700; /* Borde dorado en foco */
+            box-shadow: 0 0 8px rgba(255, 215, 0, 0.6); /* Sombra dorada en foco */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transición suave */
+        }
+
+        .button-group {
+            margin-top: 25px; /* Más espacio arriba del grupo de botones */
+            display: flex;
+            flex-wrap: wrap; /* Permite que los botones salten de línea si no caben */
+            gap: 10px; /* Espacio entre botones */
+            justify-content: center; /* Centra los botones horizontalmente en el grupo */
+            align-items: stretch; /* Asegura que todos los botones tengan la misma altura */
+            width: 100%; /* Asegura que el grupo de botones ocupe todo el ancho */
+        }
+
+        .button-group button,
+        .button-group .button { /* Estilos para botones y enlaces con clase 'button' */
+            flex: 1; /* Permite que los botones crezcan para llenar el espacio */
+            min-width: 120px; /* Ancho mínimo para cada botón */
+            max-width: 200px; /* Ancho máximo para cada botón */
+            height: 45px; /* Altura fija para todos los botones */
+            
+            background-color: #007BFF; /* Azul Fuerte */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: bold;
+            text-decoration: none; /* Elimina el subrayado de los enlaces */
+            display: flex; /* Para centrar el texto dentro del botón */
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .button-group button:hover,
+        .button-group .button:hover {
+            background-color: #0056B3; /* Un tono más oscuro de Azul Fuerte para el hover */
+            transform: translateY(-2px); /* Pequeño efecto de elevación al pasar el ratón */
+        }
+
+        #resultado {
+            margin-top: 25px;
+            font-weight: bold;
+            color: #FFD700; /* Dorado para el resultado final */
+            text-align: center; /* Centrar el texto del resultado */
+            padding-top: 15px;
+            border-top: 1px solid #555; /* Línea divisoria */
+        }
+
+        footer {
+            margin-top: 50px; /* Espacio superior para separar del contenido principal */
+            padding: 20px;
+            background-color: #222; /* Un color de fondo oscuro para el pie de página */
+            color: #ccc; /* Color de texto claro para el pie de página */
+            text-align: center;
+            font-size: 0.9em;
+            border-top: 1px solid #444; /* Línea sutil en la parte superior del pie de página */
+            width: 100%; /* Asegura que el footer ocupe todo el ancho */
+            box-sizing: border-box; /* Incluye padding y border en el width */
+        }
+
+        footer p {
+            margin: 0; /* Elimina el margen por defecto del párrafo */
+            font-style: italic; /* Para que la frase se vea como una cita */
+        }
+
+        footer strong {
+            color: #FFD700; /* Color dorado para el nombre de Warren Buffett */
+        }
+
+        /* Media queries para pantallas más pequeñas */
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px 20px;
+                max-width: 95%; /* Ocupa más ancho en pantallas pequeñas */
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            .input-group {
+                flex-direction: column; /* Apila etiquetas e inputs verticalmente */
+                align-items: flex-start; /* Alinea a la izquierda en columnas */
+            }
+            .input-group label {
+                width: 100%; /* Ocupa todo el ancho en columnas */
+                text-align: left; /* Alinea a la izquierda */
+                margin-bottom: 5px; /* Espacio extra debajo de la etiqueta */
+            }
+            .input-group input[type="number"],
+            .input-group input[type="text"] {
+                width: 100%; /* Ocupa todo el ancho en columnas */
+                min-width: unset; /* Reinicia el min-width */
+            }
+            .button-group {
+                flex-direction: column; /* Apila los botones en columnas */
+            }
+            .button-group button,
+            .button-group .button {
+                width: 80%; /* Ocupa más ancho en pantallas pequeñas */
+                max-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Tiempo Ahorro con Interés Compuesto</h1>
+
+    <div class="container">
+        <div class="input-group">
+            <label for="objetivo">Objetivo de ahorro:</label>
+            <input type="text" id="objetivo" placeholder="Cantidad deseada" onblur="formatCurrencyInput(this)" required>
+        </div>
+
+        <div class="input-group">
+            <label for="inicial">Monto inicial:</label>
+            <input type="text" id="inicial" placeholder="Monto inicial" onblur="formatCurrencyInput(this)" required>
+        </div>
+
+        <div class="input-group">
+            <label for="aportacion">Aportación mensual:</label>
+            <input type="text" id="aportacion" placeholder="Aportación mensual" onblur="formatCurrencyInput(this)" required>
+        </div>
+
+        <div class="input-group">
+            <label for="interes">Tasa de interés anual (%):</label>
+            <input type="number" id="interes" placeholder="Tasa de interés anual" min="0" step="any" required>
+        </div>
+
+        <div class="input-group">
+            <label for="aplicar_isr">¿Aplicar ISR?</label>
+            <input type="checkbox" id="aplicar_isr" onchange="toggleISR()">
+        </div>
+
+        <div class="input-group" id="isr-group" style="display: none;">
+            <label for="isr">Tasa de ISR (%):</label>
+            <input type="number" id="isr" placeholder="Tasa de ISR" min="0" step="any" value="0">
+        </div>
+
+        <div class="button-group">
+            <button onclick="calcularTiempo()">Calcular tiempo</button>
+            <button onclick="exportarCSV()">Exportar CSV</button>
+            <a href="calculos-financieros.html" class="button">Calculos Financieros</a>
+        </div>
+    </div>
+
+    <h2 id="resultado"></h2>
+
+    <script>
+        let historial = [];
+        let aplicarIsr = false;
+
+        // Nueva función para formatear campos de entrada tipo moneda al perder el foco
+        function formatCurrencyInput(input) {
+            // Eliminar las comas antes de la conversión a float
+            var valorSinComas = input.value.replace(/,/g, '');
+            var valorFloat = parseFloat(valorSinComas);
+            // Formatear con comas para la visualización (locale es-MX para México)
+            if (!isNaN(valorFloat)) {
+                input.value = valorFloat.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            } else {
+                input.value = ''; // Limpiar si no es un número válido
+            }
+        }
+
+        function toggleISR() {
+            aplicarIsr = document.getElementById('aplicar_isr').checked;
+            // Cambiado a 'flex' para input-group para mantener el diseño de la etiqueta y el input
+            document.getElementById('isr-group').style.display = aplicarIsr ? 'flex' : 'none'; 
+        }
+
+        function calcularTiempo() {
+            // Al leer los valores, eliminar las comas antes de parseFloat
+            const objetivo = parseFloat(document.getElementById('objetivo').value.replace(/,/g, ''));
+            const inicial = parseFloat(document.getElementById('inicial').value.replace(/,/g, ''));
+            const aportacion = parseFloat(document.getElementById('aportacion').value.replace(/,/g, ''));
+            const interes = parseFloat(document.getElementById('interes').value) / 100;
+            const isr = aplicarIsr ? parseFloat(document.getElementById('isr').value) / 100 : 0;
+
+            if (isNaN(objetivo) || isNaN(inicial) || isNaN(aportacion) || isNaN(interes) || (aplicarIsr && isNaN(isr))) {
+                alert('Por favor, ingrese valores válidos en todos los campos.');
+                return;
+            }
+
+            let saldo = inicial;
+            let meses = 0;
+            historial = [];
+
+            while (saldo < objetivo) {
+                saldo += aportacion;  // Sumar la aportación mensual
+                let interesGanado = saldo * (interes / 12);  // Calcular interés compuesto
+                let impuestoISR = aplicarIsr ? interesGanado * isr : 0;  // Calcular el ISR
+                let interesDespuesISR = interesGanado - impuestoISR;
+                saldo += interesDespuesISR;  // Sumar interés después de ISR al saldo
+                meses++;
+
+                historial.push({
+                    mes: meses,
+                    saldoInicial: (saldo - aportacion - interesDespuesISR).toFixed(2),
+                    aportacion: aportacion.toFixed(2),
+                    interesGanado: interesGanado.toFixed(2),
+                    impuestoISR: aplicarIsr ? impuestoISR.toFixed(2) : '',
+                    interesDespuesISR: aplicarIsr ? interesDespuesISR.toFixed(2) : '',
+                    saldoFinal: saldo.toFixed(2)
+                });
+            }
+
+            const años = Math.floor(meses / 12);
+            const mesesRestantes = meses % 12;
+            // Formatear el saldo final con comas
+            const saldoFinalFormateado = saldo.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            document.getElementById('resultado').innerHTML = 
+                `Se necesitarán ${años} años y ${mesesRestantes} meses para alcanzar el objetivo de ahorro.<br>` +
+                `Saldo final del ahorro: $${saldoFinalFormateado}`;
+        }
+
+        function exportarCSV() {
+            let csvContent = aplicarIsr 
+                ? "data:text/csv;charset=utf-8,Mes,Saldo Inicial,Aportacion Mensual,Interes Ganado,Impuesto ISR,Interes despues de ISR,Saldo Final\n"
+                : "data:text/csv;charset=utf-8,Mes,Saldo Inicial,Aportacion Mensual,Interes Ganado,Saldo Final\n";
+            
+            historial.forEach(row => {
+                if (aplicarIsr) {
+                    csvContent += `${row.mes},${row.saldoInicial},${row.aportacion},${row.interesGanado},${row.impuestoISR},${row.interesDespuesISR},${row.mes},${row.saldoFinal}\n`;
+                } else {
+                    csvContent += `${row.mes},${row.saldoInicial},${row.aportacion},${row.interesGanado},${row.saldoFinal}\n`;
+                }
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "calculo_ahorro.csv");
+            document.body.appendChild(link); 
+            link.click();
+            document.body.removeChild(link); 
+        }
+    </script>
+
+    <footer>
+        <p>"Sé temeroso cuando los demás son codiciosos y codicioso cuando los demás son temerosos."</p>
+        <p>— **Warren Buffett**</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inversión Interés Compuesto</title>
+    <link rel="stylesheet" href="calculadora-inversion.css"> 
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0; /* Reinicia el margen del body para un control total del centrado */
+            display: flex; /* Habilita Flexbox para centrar el contenido principal */
+            justify-content: center; /* Centra horizontalmente el contenido del body */
+            align-items: center; /* Centra verticalmente el contenido del body */
+            min-height: 100vh; /* Asegura que el body ocupe al menos toda la altura de la ventana */
+            background-color: #1a0033; /* Fondo púrpura oscuro impactante */
+            flex-direction: column; /* Coloca los elementos principales en columna si hay varios (ej: calculadora y posible pie de página) */
+            color: #f0f0f0; /* Color de texto general blanco/gris claro para contraste */
+        }
+        .container { /* Contenedor para la calculadora y los botones */
+            background-color: #333; /* Fondo gris oscuro para la calculadora */
+            padding: 25px 30px; /* Ajuste de padding para un mejor aspecto */
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Sombra más pronunciada */
+            width: 90%; /* Ocupa el 90% del ancho disponible */
+            max-width: 500px; /* Ancho máximo para la calculadora para evitar que se extienda demasiado */
+            text-align: center; /* Centra el texto dentro del contenedor */
+            box-sizing: border-box; /* Incluye padding y border en el width/height */
+        }
+        h2 {
+            text-align: center; /* Centra el título H2 */
+            color: #FFD700; /* Color dorado para el título */
+            margin-bottom: 25px; /* Más espacio debajo del título */
+            font-size: 1.8em; /* Ajuste de tamaño de fuente */
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px; /* Más espacio entre grupos de entrada */
+            justify-content: space-between; /* Distribuye el espacio entre label e input */
+        }
+        .input-group label {
+            margin-right: 10px; /* Más espacio entre etiqueta e input */
+            white-space: nowrap;
+            flex-shrink: 0; /* Evita que la etiqueta se encoja */
+            color: #ADD8E6; /* Azul claro para las leyendas */
+            font-size: 0.95em;
+        }
+        .input-group input[type="text"],
+        .input-group input[type="date"],
+        .input-group select {
+            flex-grow: 1; /* Permite que el input crezca y ocupe el espacio restante */
+            padding: 10px; /* Mayor padding para los campos de entrada */
+            border: 1px solid #555; /* Borde más oscuro para los campos de entrada */
+            border-radius: 5px; /* Ligeramente más redondeado */
+            box-sizing: border-box;
+            background-color: #444; /* Fondo oscuro para los campos de entrada */
+            color: #f0f0f0; /* Texto claro en los campos de entrada */
+            font-size: 1em;
+        }
+        /* Estilos para el checkbox */
+        .input-group input[type="checkbox"] {
+            margin-left: auto; /* Empuja el checkbox a la derecha */
+            transform: scale(1.2); /* Hace el checkbox un poco más grande */
+        }
+
+        .result {
+            margin-top: 25px; /* Más espacio antes del resultado */
+            font-weight: bold;
+            color: #FFD700; /* Dorado para el resultado final y las variables */
+            text-align: left; /* Alinea el resultado a la izquierda dentro de su div */
+            padding-top: 15px; /* Espacio antes de la línea divisoria */
+            border-top: 1px solid #555; /* Línea divisoria */
+        }
+        .total-item {
+            margin-bottom: 8px; /* Espacio entre cada línea de resultado */
+            font-size: 1.05em;
+        }
+        .total-item:last-child {
+            margin-bottom: 0; /* Sin margen inferior en el último item de resultado */
+        }
+
+        /* Estilos para el grupo de botones (un solo renglón, mismo tamaño y color) */
+        .button-group {
+            margin-top: 30px; /* Más espacio arriba del grupo de botones */
+            display: flex; /* Habilita Flexbox */
+            flex-wrap: wrap; /* Permite que los botones salten de línea si no caben, aunque haremos lo posible para que quepan */
+            gap: 10px; /* Espacio entre botones */
+            justify-content: center; /* Centra los botones horizontalmente en el grupo */
+            align-items: stretch; /* Asegura que todos los botones tengan la misma altura */
+        }
+        .button-group button,
+        .button-group .back-button {
+            flex: 1; /* Permite que los botones crezcan para llenar el espacio */
+            min-width: 100px; /* Ancho mínimo para cada botón */
+            max-width: 200px; /* Ancho máximo para cada botón (se ajustará según el 'gap' y el espacio disponible) */
+            height: 45px; /* Altura fija para todos los botones */
+            
+            background-color: #4169E1; /* Un azul rey y uniforme para todos los botones */
+            color: white;
+            padding: 10px 15px; /* Padding interno */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: bold;
+            text-decoration: none; /* Elimina el subrayado de los enlaces */
+            display: flex; /* Para centrar el texto dentro del botón si el texto es corto */
+            justify-content: center;
+            align-items: center;
+            text-align: center; /* Asegura el centrado del texto */
+            box-sizing: border-box; /* Incluye padding y border en el width/height */
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Transición suave para hover */
+        }
+        .button-group button:hover,
+        .button-group .back-button:hover {
+            background-color: #3A5CD6; /* Tono más oscuro al pasar el ratón */
+            transform: translateY(-2px); /* Pequeño efecto de elevación al pasar el ratón */
+        }
+
+        /* Media queries para pantallas más pequeñas para asegurar que los botones no se amontonen */
+        @media (max-width: 600px) {
+            .button-group {
+                flex-direction: column; /* Apila los botones en columnas en pantallas pequeñas */
+                align-items: center; /* Centra los botones apilados */
+            }
+            .button-group button,
+            .button-group .back-button {
+                width: 80%; /* Ocupa más ancho en pantallas pequeñas */
+                max-width: 250px; /* Ancho máximo para botones apilados */
+            }
+            .container {
+                padding: 15px 20px; /* Menos padding en pantallas pequeñas */
+            }
+            h2 {
+                font-size: 1.5em; /* Ajuste de tamaño de fuente para título en móvil */
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Inversión Interés Compuesto</h2>
+        <div class="input-group">
+            <label for="frecuencia">Frecuencia:</label>
+            <select id="frecuencia" onchange="actualizarLeyendas(); calcularFechaFinal();">
+                <option value="mensual">Mensual</option>
+                <option value="anual">Anual</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="aportacionInicial">Aportación Inicial:</label>
+            <input type="text" id="aportacionInicial" value="0" oninput="formatInputWithCommas(this)">
+        </div>
+        <div class="input-group">
+            <label for="aportacionMensual">Aportación <span id="leyendaAportacion">Mensual</span>:</label>
+            <input type="text" id="aportacionMensual" value="0" oninput="formatInputWithCommas(this)">
+        </div>
+        <div class="input-group">
+            <label for="interesAnual">Interés Anual (%):</label>
+            <input type="text" id="interesAnual" value="0" oninput="formatInputWithCommas(this)">
+        </div>
+        <div class="input-group">
+            <label for="periodoMeses">Periodo (<span id="leyendaPeriodo">meses</span>):</label>
+            <input type="text" id="periodoMeses" value="0" oninput="formatInputWithCommas(this); calcularFechaFinal();">
+        </div>
+        <div class="input-group">
+            <label for="fechaInicio">Fecha de Inicio:</label>
+            <input type="date" id="fechaInicio" onchange="calcularFechaFinal();">
+        </div>
+        <div class="input-group">
+            <label for="fechaFinal">Fecha de Finalización:</label>
+            <input type="text" id="fechaFinal" disabled>
+        </div>
+        <div class="input-group">
+            <label for="aplicarISR">Aplicar ISR:</label>
+            <input type="checkbox" id="aplicarISR" onchange="toggleISRInput()">
+        </div>
+        <div class="input-group" id="grupoISR" style="display: none;">
+            <label for="porcentajeISR">Porcentaje ISR (%):</label>
+            <input type="text" id="porcentajeISR" value="0" oninput="formatInputWithCommas(this)">
+        </div>
+        <div class="button-group">
+            <button onclick="calcularInversion()">Calcular</button>
+            <button onclick="generarCSV()">Generar CSV</button>
+            <button onclick="resetearCampos()">Resetear</button>
+            <a href="calculos-financieros.html" class="back-button">Calculos Financieros</a>
+        </div>
+
+        <div id="resultado" class="result"></div>
+    </div>
+
+    <script>
+        function toggleISRInput() {
+            const aplicarISR = document.getElementById('aplicarISR').checked;
+            const grupoISR = document.getElementById('grupoISR');
+            grupoISR.style.display = aplicarISR ? 'flex' : 'none';
+        }
+
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function formatInputWithCommas(inputElement) {
+            let value = inputElement.value.replace(/,/g, '');
+            if (!isNaN(value) && value.trim() !== '') {
+                inputElement.value = numberWithCommas(value);
+            } else {
+                inputElement.value = '';
+            }
+        }
+
+        function actualizarLeyendas() {
+            const frecuencia = document.getElementById('frecuencia').value;
+            const leyendaAportacion = document.getElementById('leyendaAportacion');
+            const leyendaPeriodo = document.getElementById('leyendaPeriodo');
+
+            if (frecuencia === 'mensual') {
+                leyendaAportacion.textContent = 'Mensual';
+                leyendaPeriodo.textContent = 'meses';
+            } else {
+                leyendaAportacion.textContent = 'Anual';
+                leyendaPeriodo.textContent = 'años';
+            }
+        }
+
+        function limpiarValor(valor) {
+            return parseFloat(valor.replace(/,/g, '')) || 0;
+        }
+
+        function calcularFechaFinal() {
+            const fechaInicio = new Date(document.getElementById('fechaInicio').value);
+            const periodoMeses = parseInt(document.getElementById('periodoMeses').value.replace(/,/g, ''));
+            const frecuencia = document.getElementById('frecuencia').value;
+
+            if (!isNaN(fechaInicio) && periodoMeses > 0) {
+                let fechaFinal = new Date(fechaInicio);
+                if (frecuencia === 'mensual') {
+                    fechaFinal.setMonth(fechaFinal.getMonth() + periodoMeses);
+                } else if (frecuencia === 'anual') {
+                    fechaFinal.setFullYear(fechaFinal.getFullYear() + periodoMeses);
+                }
+
+                const dia = String(fechaFinal.getDate()).padStart(2, '0');
+                const mes = String(fechaFinal.getMonth() + 1).padStart(2, '0');
+                const ano = fechaFinal.getFullYear();
+
+                document.getElementById('fechaFinal').value = `${dia}/${mes}/${ano}`;
+            } else {
+                document.getElementById('fechaFinal').value = '';
+            }
+        }
+
+        function calcularInversion() {
+            const aportacionInicial = limpiarValor(document.getElementById('aportacionInicial').value);
+            const aportacionMensual = limpiarValor(document.getElementById('aportacionMensual').value);
+            const interesAnual = limpiarValor(document.getElementById('interesAnual').value) / 100;
+            const periodoMeses = parseInt(document.getElementById('periodoMeses').value.replace(/,/g, ''));
+            const aplicarISR = document.getElementById('aplicarISR').checked;
+            const porcentajeISR = aplicarISR ? limpiarValor(document.getElementById('porcentajeISR').value) / 100 : 0;
+            const frecuencia = document.getElementById('frecuencia').value;
+            const tasa = frecuencia === 'mensual' ? interesAnual / 12 : interesAnual;
+
+            let saldo = aportacionInicial;
+            let totalIntereses = 0;
+            let totalAportaciones = aportacionInicial;
+
+            if (frecuencia === 'mensual') {
+                totalAportaciones += aportacionMensual * periodoMeses;
+            } else if (frecuencia === 'anual') {
+                totalAportaciones += aportacionMensual * (periodoMeses);
+            }
+
+            for (let i = 0; i < periodoMeses; i++) {
+                saldo += aportacionMensual;
+                const intereses = saldo * tasa;
+                saldo += intereses;
+                totalIntereses += intereses;
+            }
+
+            let resultadoTexto = `
+                <div class="total-item">Total Aportaciones: $${numberWithCommas(totalAportaciones.toFixed(2))}</div>
+                <div class="total-item">Interés Compuesto : $${numberWithCommas(totalIntereses.toFixed(2))}</div>`;
+            if (aplicarISR) {
+                const ISR = totalIntereses * porcentajeISR;
+                saldo -= ISR;
+                resultadoTexto += `<div class="total-item">Total ISR: $${numberWithCommas(ISR.toFixed(2))}</div>`;
+            }
+
+            resultadoTexto += `<div class="total-item">Saldo Final: $${numberWithCommas(saldo.toFixed(2))}</div>`;
+            document.getElementById('resultado').innerHTML = resultadoTexto;
+        }
+
+        function generarCSV() {
+            const aportacionInicial = limpiarValor(document.getElementById('aportacionInicial').value);
+            const aportacionMensual = limpiarValor(document.getElementById('aportacionMensual').value);
+            const interesAnual = limpiarValor(document.getElementById('interesAnual').value) / 100;
+            const periodoMeses = parseInt(document.getElementById('periodoMeses').value.replace(/,/g, ''));
+            const aplicarISR = document.getElementById('aplicarISR').checked;
+            const porcentajeISR = aplicarISR ? limpiarValor(document.getElementById('porcentajeISR').value) / 100 : 0;
+            const frecuencia = document.getElementById('frecuencia').value;
+            const tasa = frecuencia === 'mensual' ? interesAnual / 12 : interesAnual;
+
+            let saldo = aportacionInicial;
+            let totalIntereses = 0;
+            let totalAportaciones = aportacionInicial;
+            let totalISR = 0;
+            let csvContent = "data:text/csv;charset=utf-8,";
+            if (frecuencia === 'mensual') {
+                totalAportaciones += aportacionMensual * periodoMeses;
+            } else if (frecuencia === 'anual') {
+                totalAportaciones += aportacionMensual * (periodoMeses);
+            }
+
+            csvContent += "Calculadora de Inversion con Interes Compuesto\n";
+            csvContent += `Periodo,Saldo Inicial,Aportacion ${frecuencia === 'mensual' ? 'Mensual' : 'Anual'},Interes Compuesto,ISR,Saldo Final\n`;
+            for (let i = 0; i < periodoMeses; i++) {
+                let saldoInicial = saldo;
+                saldo += aportacionMensual;
+                const intereses = saldo * tasa;
+                saldo += intereses;
+                totalIntereses += intereses;
+
+                let ISR = aplicarISR ? intereses * porcentajeISR : 0;
+                totalISR += ISR;
+                let saldoFinal = saldo - ISR;
+
+                csvContent += `${i + 1},${saldoInicial.toFixed(2)},${aportacionMensual.toFixed(2)},${intereses.toFixed(2)},${ISR.toFixed(2)},${saldoFinal.toFixed(2)}\n`;
+            }
+
+            saldo -= totalISR;
+
+            csvContent += `\nTotal,,${totalAportaciones.toFixed(2)},${totalIntereses.toFixed(2)},${totalISR.toFixed(2)},${saldo.toFixed(2)}\n`;
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "resultado_inversion.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function resetearCampos() {
+            document.getElementById('aportacionInicial').value = '0';
+            document.getElementById('aportacionMensual').value = '0';
+            document.getElementById('interesAnual').value = '0';
+            document.getElementById('periodoMeses').value = '0';
+            document.getElementById('aplicarISR').checked = false;
+            document.getElementById('porcentajeISR').value = '0';
+            document.getElementById('grupoISR').style.display = 'none';
+            document.getElementById('fechaInicio').value = '';
+            document.getElementById('fechaFinal').value = '';
+            document.getElementById('resultado').innerHTML = '';
+        }
+    </script>
+
+    <div class="footer">
+        <p>"W.F. La regla número uno es no perder dinero. La regla número dos es no olvidar la regla número uno."</p>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Regla del 72</title>
+    <style>
+        body {
+            background-color: #1a0033; /* Fondo púrpura oscuro para consistencia */
+            color: #f0f0f0; /* Texto claro */
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            padding: 20px; /* Un poco de padding general */
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: #333; /* Fondo gris oscuro */
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%; /* Asegura que ocupe todo el ancho disponible */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            box-sizing: border-box; /* Incluye padding en el ancho */
+        }
+        h1 {
+            color: #FFD700; /* Dorado para el título */
+            margin-bottom: 25px;
+            font-size: 2.2em;
+        }
+        p {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1em;
+            color: #ADD8E6; /* Azul claro para las etiquetas */
+            text-align: left; /* Alinea la etiqueta a la izquierda */
+        }
+        input[type="text"],
+        input[type="number"] {
+            padding: 10px;
+            border: 1px solid #ADD8E6; /* Borde azul claro */
+            border-radius: 5px;
+            width: calc(100% - 22px); /* Ancho completo menos padding/border */
+            margin-bottom: 20px;
+            background-color: #444; /* Fondo oscuro para los campos */
+            color: #f0f0f0; /* Texto claro */
+            font-size: 1em;
+            box-sizing: border-box; /* Incluye padding en el ancho */
+        }
+        input::placeholder {
+            color: #ccc;
+        }
+
+        /* Grupo de botones para Flexbox */
+        .button-group {
+            display: flex;
+            justify-content: center; /* Centra los botones horizontalmente */
+            gap: 15px; /* Espacio entre los botones */
+            margin-top: 20px;
+            flex-wrap: wrap; /* Permite que los botones salten de línea en pantallas pequeñas */
+            width: 100%; /* Asegura que el grupo ocupe todo el ancho */
+        }
+
+        /* Estilo unificado para todos los botones */
+        .button-group button,
+        .button-group .button { /* Aplica a <button> y <a> con clase .button */
+            background-color: #FFD700; /* Dorado para el fondo */
+            color: #1a0033; /* Púrpura oscuro para el texto */
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-decoration: none; /* Elimina el subrayado de los enlaces */
+            display: inline-flex; /* Para centrar el texto dentro del botón */
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            flex-grow: 1; /* Permite que los botones crezcan */
+            max-width: 200px; /* Ancho máximo para cada botón */
+            box-sizing: border-box; /* Asegura que el padding no añada ancho extra */
+        }
+
+        .button-group button:hover,
+        .button-group .button:hover {
+            background-color: #DAA520; /* Tono más oscuro de dorado para el hover */
+            transform: translateY(-2px); /* Pequeño efecto de elevación */
+        }
+
+        #resultado {
+            margin-top: 25px;
+            margin-bottom: 25px;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #FFD700; /* Dorado para el resultado */
+        }
+        .variable-color {
+            color: #ADD8E6; /* Azul claro para las variables en el resultado */
+        }
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #555;
+            font-size: 0.9em;
+            color: #AAA;
+            text-align: center;
+            max-width: 500px; /* Ancho similar al contenedor */
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .footer p {
+            margin: 0;
+        }
+
+        /* Media queries para pantallas más pequeñas */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            label {
+                font-size: 0.9em;
+            }
+            .button-group {
+                flex-direction: column; /* Apila los botones en columnas */
+                align-items: center; /* Centra los botones apilados */
+            }
+            .button-group button,
+            .button-group .button {
+                width: 80%; /* Ocupa más ancho en pantallas pequeñas */
+                max-width: 250px;
+                padding: 10px 15px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora Regla del 72</h1>
+        <p>La **Regla del 72** es una fórmula sencilla para estimar el tiempo que tardará una inversión en duplicar su valor, dada una tasa de rendimiento anual fija. </p>
+
+        <label for="montoInversion">Ingresa tu inversión inicial ($):</label>
+        <input type="text" id="montoInversion" placeholder="Por ejemplo, 1,000" onblur="formatCurrencyInput(this)" required>
+
+        <label for="tasaInteres">Ingresa la tasa de interés anual (ej. 7 para 7%):</label>
+        <input type="number" id="tasaInteres" placeholder="Por ejemplo, 7" required>
+        
+        <div class="button-group">
+            <button onclick="calcularRegla72()">Calcular</button>
+            <a href="calculos-financieros.html" class="button">Calculos Financieros</a>
+        </div>
+        
+        <div id="resultado"></div>
+    </div>
+
+    <div class="footer">
+        <p>"El mejor momento para invertir fue hace 20 años. El segundo mejor momento es hoy."</p>
+        <p>— **Warren Buffett**</p>
+    </div>
+
+    <script>
+        // Función para formatear campos de entrada tipo moneda al perder el foco
+        function formatCurrencyInput(input) {
+            // Eliminar las comas antes de la conversión a float
+            var valorSinComas = input.value.replace(/,/g, '');
+            var valorFloat = parseFloat(valorSinComas);
+            // Formatear con comas para la visualización (locale es-MX para México)
+            if (!isNaN(valorFloat)) {
+                input.value = valorFloat.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            } else {
+                input.value = ''; // Limpiar si no es un número válido
+            }
+        }
+
+        function calcularRegla72() {
+            const montoInput = document.getElementById('montoInversion');
+            const tasaInput = document.getElementById('tasaInteres');
+            const resultadoDiv = document.getElementById('resultado');
+            
+            // Limpiar las comas para el cálculo
+            const montoSinComas = montoInput.value.replace(/,/g, '');
+            const monto = parseFloat(montoSinComas);
+            
+            const tasa = parseFloat(tasaInput.value);
+
+            if (isNaN(monto) || monto <= 0 || isNaN(tasa) || tasa <= 0) {
+                resultadoDiv.textContent = 'Por favor, ingresa valores válidos y positivos para la inversión y la tasa.';
+                return;
+            }
+
+            const años = 72 / tasa;
+            const inversionDuplicada = monto * 2;
+
+            // Formatear los números para la salida
+            const montoFormateado = monto.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            const inversionDuplicadaFormateada = inversionDuplicada.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            resultadoDiv.innerHTML = `Con una tasa del <span class="variable-color">${tasa}%</span>, tu inversión de <span class="variable-color">$${montoFormateado}</span> se duplicará a <span class="variable-color">$${inversionDuplicadaFormateada}</span> en aproximadamente <span class="variable-color">${años.toFixed(2)}</span> años.`;
+        }
+    </script>
+</body>
+</html>

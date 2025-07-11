@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulación de Pensión IMSS Ley 73</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Simulación de Pensión - IMSS Ley 73</h2>
+        <form id="pensionForm">
+            <label for="anioIngreso">Año de ingreso al IMSS:</label>
+            <select id="anioIngreso" required></select>
+
+            <label for="edadActual">Edad actual:</label>
+            <select id="edadActual" required></select>
+
+            <label for="semanasCotizadas">Semanas cotizadas:</label>
+            <input type="number" id="semanasCotizadas" min="500" max="4200" required>
+
+            <h3>Últimos 5 años cotizados</h3>
+            <div class="cotizaciones">
+                <div class="row">
+                    <label>Año 1:</label>
+                    <input type="number" id="anio1" required>
+                    <label>Salario Promedio Mensual:</label>
+                    <input type="text" id="salario1" required>
+                </div>
+                <div class="row">
+                    <label>Año 2:</label>
+                    <input type="number" id="anio2" required>
+                    <label>Salario Promedio Mensual:</label>
+                    <input type="text" id="salario2" required>
+                </div>
+                <div class="row">
+                    <label>Año 3:</label>
+                    <input type="number" id="anio3" required>
+                    <label>Salario Promedio Mensual:</label>
+                    <input type="text" id="salario3" required>
+                </div>
+                <div class="row">
+                    <label>Año 4:</label>
+                    <input type="number" id="anio4" required>
+                    <label>Salario Promedio Mensual:</label>
+                    <input type="text" id="salario4" required>
+                </div>
+                <div class="row">
+                    <label>Año 5:</label>
+                    <input type="number" id="anio5" required>
+                    <label>Salario Promedio Mensual:</label>
+                    <input type="text" id="salario5" required>
+                </div>
+            </div>
+
+            <button type="submit">Calcular Pensión</button>
+            <button type="reset">Reiniciar</button>
+            <button id="pdfBtn">Generar PDF</button>
+            <button id="xmlBtn">Generar XML</button>
+        </form>
+        
+        <div id="resultados">
+            <h3>Resultados</h3>
+            <p>Tipo de Pensión: <span id="tipoPension"></span></p>
+            <p>Semanas cotizadas: <span id="semanasTotales"></span></p>
+            <p>Salario Promedio Mensual: <span id="salarioPromedio"></span></p>
+            <p>Porcentaje de Cuantía: <span id="porcentajeCuantia"></span></p>
+            <p>Importe de Pensión: <span id="importePension"></span></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

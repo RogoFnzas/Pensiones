@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pensiones Cronos - Financiero ROGO v.1.0</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(-45deg, #00aae4, #0077b6, #7ac943);
+            background-size: 400% 400%;
+            animation: gradientBG 12s ease infinite;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .header-container {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 20px;
+            box-sizing: border-box;
+            position: absolute;
+            top: 0;
+        }
+
+        .header {
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .main-title {
+            font-size: 2.5em;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #ffffff;
+        }
+
+        .subtitle {
+            font-size: 1.6em;
+            margin: 5px 0 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            color: #fff;
+        }
+
+        .version-badge {
+            background-color: rgba(255, 152, 0, 0.8);
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .date-display {
+            font-size: 0.9em;
+            color: white;
+            background-color: rgba(0, 170, 228, 0.7);
+            padding: 6px 12px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            max-width: 650px;
+            width: 90%;
+            margin-top: 10px;
+            color: #333;
+        }
+
+        .development-message {
+            font-size: 1.3em;
+            line-height: 1.5;
+            margin: 15px 0;
+            color: #0077b6;
+        }
+
+        .working-image {
+            width: 160px;
+            height: 160px;
+            object-fit: contain;
+            margin: 10px 0;
+            animation: typingAnimation 4s infinite, float 3s ease-in-out infinite;
+            filter: drop-shadow(0 5px 8px rgba(0, 170, 228, 0.4));
+        }
+
+        @keyframes typingAnimation {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-3px) rotate(1deg); }
+            50% { transform: translateY(0) rotate(0deg); }
+            75% { transform: translateY(-3px) rotate(-1deg); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: rgba(0, 170, 228, 0.2);
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: linear-gradient(90deg, #7ac943, #ff9800);
+            border-radius: 8px;
+            width: 65%;
+            animation: progressAnimation 2s ease-in-out infinite;
+        }
+
+        @keyframes progressAnimation {
+            0%, 100% { width: 65%; }
+            50% { width: 68%; }
+        }
+
+        .back-button-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .back-button {
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+            box-shadow: 0 3px 6px rgba(255, 152, 0, 0.3);
+        }
+
+        .back-button:hover {
+            background-color: #ffab00;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(255, 152, 0, 0.4);
+        }
+
+        .contact {
+            margin-top: 15px;
+            font-style: italic;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <div></div>
+        <div class="date-display" id="currentDate"></div>
+    </div>
+
+    <div class="header">
+        <h1 class="main-title">Pensiones Cronos</h1>
+        <h2 class="subtitle">Financiero <span class="version-badge">ROGO v.1.0</span></h2>
+    </div>
+
+    <div class="container">
+        <img src="https://cdn-icons-png.flaticon.com/512/4052/4052984.png" alt="Persona trabajando en laptop" class="working-image">
+        
+        <div class="development-message">
+            <p>Esta funcionalidad se encuentra actualmente en desarrollo.</p>
+            <p>Estamos trabajando para ofrecerte la mejor experiencia posible.</p>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+        
+        <div class="back-button-container">
+            <a href="index.html" class="back-button">← Volver al Inicio</a>
+        </div>
+        
+        <div class="contact">
+            <p>Para más información, contacte al equipo de desarrollo</p>
+            <p>ROGO FINANZAS</p>
+        </div>
+    </div>
+
+    <script>
+        // Mostrar fecha actual
+        function updateDate() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const now = new Date();
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('es-ES', options);
+        }
+        
+        updateDate();
+    </script>
+</body>
+</html>

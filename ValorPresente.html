@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valor Presente</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #1a0033; /* Fondo púrpura oscuro impactante */
+            flex-direction: column;
+            color: #f0f0f0; /* Color de texto general blanco/gris claro */
+        }
+        .container { /* Contenedor principal de la calculadora */
+            background-color: #333; /* Fondo gris oscuro para la calculadora */
+            padding: 25px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 700px; /* Ancho suficiente para contenido */
+            text-align: center;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #FFD700; /* Color dorado para el título */
+            margin-bottom: 25px;
+            font-size: 2em;
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px; /* Espacio entre grupos de entrada */
+            justify-content: space-between; /* Distribuye el espacio entre label e input */
+            flex-wrap: wrap; /* Permite que los elementos salten de línea en pantallas pequeñas */
+        }
+        .input-group label {
+            flex-shrink: 0; /* Evita que la etiqueta se encoja */
+            color: #ADD8E6; /* Azul claro para las leyendas */
+            font-size: 0.95em;
+            text-align: right; /* Alinea el texto de la etiqueta a la derecha */
+            margin-right: 10px;
+            width: 220px; /* Ancho fijo para las etiquetas, ajustado para el ejemplo */
+            box-sizing: border-box;
+        }
+        .input-group input {
+            flex-grow: 1; /* Permite que el input crezca y ocupe el espacio restante */
+            padding: 10px;
+            border: 1px solid #ADD8E6; /* Borde azul claro para más visibilidad inicial */
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: #444; /* Fondo oscuro para los campos de entrada */
+            color: #f0f0f0; /* Texto claro en los campos de entrada */
+            font-size: 1em;
+            min-width: 150px; /* Ancho mínimo para los inputs */
+        }
+
+        /* ESTILO PARA LOS CAMPOS CUANDO ESTÁN EN FOCO (cuando haces clic en ellos) */
+        .input-group input:focus {
+            outline: none; /* Elimina el contorno predeterminado del navegador */
+            border-color: #FFD700; /* Borde dorado en foco */
+            box-shadow: 0 0 8px rgba(255, 215, 0, 0.6); /* Sombra dorada en foco */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transición suave */
+        }
+
+        /* Estilos para el grupo de botones (un solo renglón, mismo tamaño y color) */
+        .button-group {
+            margin-top: 25px; /* Espacio arriba del grupo de botones */
+            display: flex;
+            flex-wrap: wrap; /* Permite que los botones salten de línea */
+            gap: 10px; /* Espacio entre botones */
+            justify-content: center; /* Centra los botones horizontalmente */
+            align-items: stretch; /* Asegura que todos los botones tengan la misma altura */
+        }
+        .button-group button,
+        .button-group .menu-button { /* Aplica estilo a botones y el nuevo enlace */
+            flex: 1; /* Permite que los botones crezcan para llenar el espacio */
+            min-width: 120px; /* Ancho mínimo para cada botón */
+            max-width: 200px; /* Ancho máximo para cada botón */
+            height: 45px; /* Altura fija para todos los botones */
+            
+            background-color: #007BFF; /* Azul Fuerte */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: bold;
+            text-decoration: none; /* Elimina el subrayado de los enlaces */
+            display: flex; /* Para centrar el texto dentro del botón */
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .button-group button:hover,
+        .button-group .menu-button:hover {
+            background-color: #0056B3; /* Tono más oscuro de Azul Fuerte para el hover */
+            transform: translateY(-2px); /* Pequeño efecto de elevación al pasar el ratón */
+        }
+
+        #resultado {
+            margin-top: 25px;
+            font-weight: bold;
+            color: #FFD700; /* Dorado para el resultado */
+            text-align: left; /* Alineación a la izquierda para los resultados en varias líneas */
+            padding-top: 15px;
+            border-top: 1px solid #555; /* Línea divisoria */
+            /* Se eliminan: white-space: nowrap; overflow: hidden; text-overflow: ellipsis; */
+            /* para permitir saltos de línea */
+        }
+
+        /* Media queries para pantallas más pequeñas */
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px 20px;
+                max-width: 90%; /* Ajuste para que ocupe casi todo el ancho en móviles */
+            }
+            h1 {
+                font-size: 1.6em;
+            }
+            .input-group {
+                flex-direction: column; /* Apila etiquetas e inputs verticalmente */
+                align-items: flex-start; /* Alinea a la izquierda en columnas */
+            }
+            .input-group label {
+                width: 100%; /* Ocupa todo el ancho en columnas */
+                text-align: left; /* Alinea a la izquierda */
+                margin-bottom: 5px; /* Espacio extra debajo de la etiqueta */
+            }
+            .input-group input {
+                width: 100%; /* Ocupa todo el ancho en columnas */
+                min-width: unset; /* Reinicia el min-width */
+            }
+            .button-group {
+                flex-direction: column; /* Apila los botones en columnas */
+                align-items: center;
+            }
+            .button-group button,
+            .button-group .menu-button {
+                width: 80%; /* Ocupa más ancho en pantallas pequeñas */
+                max-width: 250px;
+            }
+            #resultado {
+                font-size: 0.9em; /* Reducir ligeramente el tamaño de fuente para que quepa mejor */
+            }
+        }
+    </style>
+    <script>
+        function formatearValorFuturo(input) {
+            // Eliminar las comas antes de la conversión a float
+            var valorSinComas = input.value.replace(/,/g, '');
+            var valorFloat = parseFloat(valorSinComas);
+            // Formatear con comas para la visualización (locale es-MX para México)
+            if (!isNaN(valorFloat)) {
+                input.value = valorFloat.toLocaleString('es-MX');
+            } else {
+                input.value = ''; // Limpiar si no es un número válido
+            }
+        }
+
+        function calcularValorPresente() {
+            var VF = parseFloat(document.getElementById('future_value').value.replace(/,/g, '')) || 0; // Limpiar y convertir a número
+            var i = parseFloat(document.getElementById('inflation_rate').value) / 100 || 0;
+            var n = parseFloat(document.getElementById('periods').value) || 0;
+
+            if (VF === 0 || i === 0 || n === 0) {
+                document.getElementById('resultado').innerText = "Por favor, ingresa valores válidos en todos los campos.";
+                return false;
+            }
+            
+            // Si la tasa de inflación es 0, VP es igual a VF y la inflación es 0
+            var VP;
+            if (i === 0) {
+                VP = VF;
+            } else {
+                VP = VF / Math.pow((1 + i), n);
+            }
+            
+            var inflacion = VF - VP;
+            
+            // Revertir a líneas separadas usando <br>
+            document.getElementById('resultado').innerHTML = `
+                Valor Presente: **$${VP.toLocaleString('es-MX', {minimumFractionDigits: 2, maximumFractionDigits: 2})}**<br>
+                Inflación: **${(i * 100).toFixed(2)}%**<br>
+                Periodos: **${String(n).padStart(2, '0')} años**<br>
+                Valor Futuro (inicial): **$${VF.toLocaleString('es-MX', {minimumFractionDigits: 2, maximumFractionDigits: 2})}**
+            `;
+            return false; // Para prevenir que el formulario se envíe
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Valor Presente</h1>
+        <form onsubmit="return calcularValorPresente();">
+            <div class="input-group">
+                <label for="future_value">Valor Futuro (VF):</label>
+                <input type="text" id="future_value" name="future_value" onblur="formatearValorFuturo(this);" required>
+            </div>
+            <div class="input-group">
+                <label for="inflation_rate">Tasa de Inflación (i) %:</label>
+                <input type="number" id="inflation_rate" name="inflation_rate" step="0.01" required>
+            </div>
+            <div class="input-group">
+                <label for="periods">Número de Periodos (n) en años:</label>
+                <input type="number" id="periods" name="periods" required>
+            </div>
+            <div class="button-group">
+                <button type="submit">Calcular</button>
+                <a href="calculos-financieros.html" class="menu-button">Calculos Financieros</a>
+            </div>
+        </form>
+        <p id="resultado"></p>
+    </div>
+
+    <div class="footer">
+        <p>"W.F. El mejor momento para invertir fue hace 20 años. El segundo mejor momento es hoy."</p>
+    </div>
+
+</body>
+</html>
