@@ -15,7 +15,7 @@
         }
         .container {
             max-width: 800px;
-            margin: 40px auto;
+            margin: 30px auto;
             padding: 30px;
             background-color: #ffffff;
             border: 1px solid #ddd;
@@ -24,7 +24,7 @@
         }
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         .header h1 {
             color: #006847; /* IMSS Green */
@@ -34,19 +34,19 @@
             border-bottom: 2px solid #006847;
         }
         .form-section {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         .form-section h3 {
             color: #006847;
             border-bottom: 1px solid #ccc;
             padding-bottom: 5px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         .form-group {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         .form-group label {
             flex: 0 0 250px;
@@ -62,12 +62,63 @@
             min-width: 200px;
             box-sizing: border-box;
         }
-        .form-group.inline-fields {
+        /* New Styles for compact layout */
+        .personal-info-labels, .personal-info-inputs {
             display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        .personal-info-labels label, .personal-info-inputs input {
+            flex: 1;
+            text-align: center;
+        }
+        .personal-info-inputs {
+            margin-bottom: 20px;
+        }
+        .personal-info-labels label {
+            font-weight: bold;
+            font-size: 0.9em;
+            color: #555;
+        }
+        /* New flexible 3-column layout */
+        .form-group-compact {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
             align-items: center;
         }
-        .form-group.inline-fields input {
-            margin-right: 10px;
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 150px;
+        }
+        .field-group label {
+            flex: unset;
+            text-align: left;
+            font-weight: bold;
+            margin-right: 0;
+            margin-bottom: 5px;
+        }
+        /* Ajuste de 10 caracteres para los campos de año de ingreso, edad y semanas cotizadas */
+        .field-group select,
+        .field-group input {
+            width: 10ch;
+            min-width: unset;
+            flex: unset;
+        }
+        /* Ajuste de 12 caracteres para los campos de años de cotización */
+        .year-input {
+            width: 12ch;
+            min-width: unset;
+            flex: unset;
+        }
+        /* Ajuste de 15 caracteres para los campos de salario */
+        .salary-input {
+            width: 15ch;
+            min-width: unset;
+            flex: unset;
         }
         .radio-group {
             display: flex;
@@ -82,7 +133,7 @@
         }
         .buttons-group {
             text-align: center;
-            margin-top: 40px;
+            margin-top: 30px;
         }
         .buttons-group button {
             background-color: #006847;
@@ -99,20 +150,20 @@
             background-color: #004d35;
         }
         .output-section {
-            margin-top: 40px;
+            margin-top: 30px;
             border-top: 2px dashed #006847;
-            padding-top: 30px;
+            padding-top: 20px;
         }
         .output-section h3 {
             text-align: center;
             color: #006847;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         .output-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
-            padding: 8px 0;
+            margin-bottom: 8px;
+            padding: 6px 0;
             border-bottom: 1px solid #eee;
         }
         .output-row .label {
@@ -129,15 +180,18 @@
             margin-top: 10px;
         }
         @media (max-width: 768px) {
-            .form-group label, .personal-info-row label {
+            .form-group label, .personal-info-labels label {
                 flex: 1 1 100%;
                 text-align: left;
             }
-            .form-group input, .form-group select {
+            .form-group input, .form-group select,
+            .personal-info-inputs input {
                 flex: 1 1 100%;
             }
-            .radio-group, #childrenSelectGroup {
+            .personal-info-labels, .personal-info-inputs, .radio-group, #childrenSelectGroup {
+                flex-direction: column;
                 margin-left: 0;
+                gap: 5px;
             }
         }
     </style>
@@ -153,42 +207,42 @@
         <form id="pensionForm" onsubmit="return false;">
             <div class="form-section">
                 <h3>Datos Personales</h3>
-                <div class="form-group">
+                <div class="personal-info-labels">
                     <label for="nombre">Nombre:</label>
-                    <input type="text" id="nombre" name="nombre" required>
-                </div>
-                <div class="form-group">
                     <label for="apellidoPaterno">Apellido Paterno:</label>
-                    <input type="text" id="apellidoPaterno" name="apellidoPaterno" required>
-                </div>
-                <div class="form-group">
                     <label for="apellidoMaterno">Apellido Materno:</label>
+                </div>
+                <div class="personal-info-inputs">
+                    <input type="text" id="nombre" name="nombre" required>
+                    <input type="text" id="apellidoPaterno" name="apellidoPaterno" required>
                     <input type="text" id="apellidoMaterno" name="apellidoMaterno" required>
                 </div>
             </div>
 
-            <div class="form-section">
+            <div class="form-section pension-fields-group">
                 <h3>Cálculo de la Pensión</h3>
-                <div class="form-group">
-                    <label for="yearJoined">Año en que ingresaste al IMSS:</label>
-                    <select id="yearJoined" name="yearJoined" required></select>
-                </div>
-                <div class="form-group">
-                    <label for="currentAge">Edad actual:</label>
-                    <select id="currentAge" name="currentAge" required></select>
-                </div>
-                <div class="form-group">
-                    <label for="weeksQuoted">Semanas cotizadas:</label>
-                    <input type="number" id="weeksQuoted" name="weeksQuoted" min="500" max="4200" maxlength="4" required>
+                <div class="form-group-compact">
+                    <div class="field-group">
+                        <label for="yearJoined">Año en que ingresaste al IMSS:</label>
+                        <select id="yearJoined" name="yearJoined" required></select>
+                    </div>
+                    <div class="field-group">
+                        <label for="currentAge">Edad actual:</label>
+                        <select id="currentAge" name="currentAge" required></select>
+                    </div>
+                    <div class="field-group">
+                        <label for="weeksQuoted">Semanas cotizadas:</label>
+                        <input type="number" id="weeksQuoted" name="weeksQuoted" min="500" max="4200" maxlength="4" required>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label>Tipo de Pensión:</label>
                 </div>
                 <div class="radio-group">
-                    <label><input type="radio" name="pensionType" value="individual" checked> Primera sólo para el trabajador (pensión individual)</label>
-                    <label><input type="radio" name="pensionType" value="spouse"> Segunda para trabajador y esposa</label>
-                    <label><input type="radio" name="pensionType" value="children" id="childrenOption"> Tercera para trabajador, esposa e hijos</label>
+                    <label><input type="radio" name="pensionType" value="individual" checked> Sólo para el trabajador (pensión individual)</label>
+                    <label><input type="radio" name="pensionType" value="spouse"> Para trabajador y esposa</label>
+                    <label><input type="radio" name="pensionType" value="children" id="childrenOption"> Para trabajador, esposa e hijos</label>
                 </div>
 
                 <div class="form-group" id="childrenSelectGroup">
@@ -208,28 +262,28 @@
                 <p style="font-size: 0.9em; color: #555;">Ingrese el año y el salario mensual promedio de cada uno de sus últimos 5 años de cotización.</p>
                 <div class="form-group inline-fields">
                     <label for="year1">Año de cotización 1:</label>
-                    <input type="number" id="year1" name="year1" class="year-input" placeholder="Año" min="1950" maxlength="4" required>
-                    <input type="text" id="salary1" name="salary1" class="salary-input" placeholder="Salario Mensual" maxlength="10" required>
+                    <input type="number" id="year1" name="year1" class="year-input" placeholder="Año" min="1950" maxlength="12" required>
+                    <input type="text" id="salary1" name="salary1" class="salary-input" placeholder="Salario Mensual" maxlength="15" required>
                 </div>
                 <div class="form-group inline-fields">
                     <label for="year2">Año de cotización 2:</label>
-                    <input type="number" id="year2" name="year2" class="year-input" placeholder="Año" min="1950" maxlength="4" required>
-                    <input type="text" id="salary2" name="salary2" class="salary-input" placeholder="Salario Mensual" maxlength="10" required>
+                    <input type="number" id="year2" name="year2" class="year-input" placeholder="Año" min="1950" maxlength="12" required>
+                    <input type="text" id="salary2" name="salary2" class="salary-input" placeholder="Salario Mensual" maxlength="15" required>
                 </div>
                 <div class="form-group inline-fields">
                     <label for="year3">Año de cotización 3:</label>
-                    <input type="number" id="year3" name="year3" class="year-input" placeholder="Año" min="1950" maxlength="4" required>
-                    <input type="text" id="salary3" name="salary3" class="salary-input" placeholder="Salario Mensual" maxlength="10" required>
+                    <input type="number" id="year3" name="year3" class="year-input" placeholder="Año" min="1950" maxlength="12" required>
+                    <input type="text" id="salary3" name="salary3" class="salary-input" placeholder="Salario Mensual" maxlength="15" required>
                 </div>
                 <div class="form-group inline-fields">
                     <label for="year4">Año de cotización 4:</label>
-                    <input type="number" id="year4" name="year4" class="year-input" placeholder="Año" min="1950" maxlength="4" required>
-                    <input type="text" id="salary4" name="salary4" class="salary-input" placeholder="Salario Mensual" maxlength="10" required>
+                    <input type="number" id="year4" name="year4" class="year-input" placeholder="Año" min="1950" maxlength="12" required>
+                    <input type="text" id="salary4" name="salary4" class="salary-input" placeholder="Salario Mensual" maxlength="15" required>
                 </div>
                 <div class="form-group inline-fields">
                     <label for="year5">Año de cotización 5:</label>
-                    <input type="number" id="year5" name="year5" class="year-input" placeholder="Año" min="1950" maxlength="4" required>
-                    <input type="text" id="salary5" name="salary5" class="salary-input" placeholder="Salario Mensual" maxlength="10" required>
+                    <input type="number" id="year5" name="year5" class="year-input" placeholder="Año" min="1950" maxlength="12" required>
+                    <input type="text" id="salary5" name="salary5" class="salary-input" placeholder="Salario Mensual" maxlength="15" required>
                 </div>
             </div>
 
@@ -238,6 +292,7 @@
                 <button type="button" id="generatePdfBtn">Generar PDF</button>
                 <button type="button" id="generateCsvBtn">Generar CSV</button>
                 <button type="reset">Inicializar</button>
+                <button type="button" id="goHomeBtn">Regresar</button>
             </div>
         </form>
 
@@ -290,15 +345,16 @@
             const pensionForm = document.getElementById('pensionForm');
             const calculateBtn = document.getElementById('calculateBtn');
             const yearsInput = document.querySelectorAll('.year-input');
+            const salaryInputs = document.querySelectorAll('.salary-input');
             const childrenOption = document.getElementById('childrenOption');
             const childrenSelectGroup = document.getElementById('childrenSelectGroup');
             const pensionTypeRadios = document.querySelectorAll('input[name="pensionType"]');
             const outputElements = {
                 type: document.getElementById('outputPensionType'),
                 weeks: document.getElementById('outputWeeks'),
-                weeksPercentage: document.getElementById('outputWeeksPercentage'), // Nuevo elemento
+                weeksPercentage: document.getElementById('outputWeeksPercentage'),
                 averageSalary: document.getElementById('outputAverageSalary'),
-                percentage: document.getElementById('outputPercentage'), // Este es el porcentaje por edad
+                percentage: document.getElementById('outputPercentage'),
                 totalPension: document.getElementById('outputTotalPension')
             };
 
@@ -331,6 +387,16 @@
                 }
                 return true;
             }
+            
+            // Format salary input with commas
+            salaryInputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    const value = this.value.replace(/,/g, '');
+                    if (value) {
+                        this.value = parseFloat(value).toLocaleString('es-MX');
+                    }
+                });
+            });
 
             function calculatePension() {
                 try {
@@ -345,7 +411,6 @@
                     let totalSalary = 0;
                     for (let i = 1; i <= 5; i++) {
                         const salaryInput = document.getElementById(`salary${i}`);
-                        // Handle comma as a thousand separator
                         const salary = parseFloat(salaryInput.value.replace(/,/g, ''));
                         if (isNaN(salary) || salary <= 0) {
                             alert('Por favor, ingrese un salario promedio mensual válido para todos los años.');
@@ -366,90 +431,71 @@
                     }
 
                     // --- SIMULATION LOGIC BASED ON LEY 73 (CUANTÍA BÁSICA + INCREMENTO ANUAL) ---
-                    
-                    // UMA 2025 value (Official value)
-                    const UMA_DIARIA = 115.75;
-                    // Salario Minimo 2025 (Official value)
-                    const SALARIO_MINIMO_DIARIO = 260.8; 
-                    
-                    // Factores de Cuantía Básica e Incremento Anual.
-                    // Estos son valores aproximados para salarios por encima de 6-7 UMAS/SM,
-                    // donde la Cuantía Básica tiende a ser menor y el incremento mayor.
-                    // La tabla exacta del IMSS es más granular.
-                    const basicCuantiaFactor = 0.40; // Aproximado para salarios altos
-                    const incrementFactor = 0.0245; // Aproximado para salarios altos (2.45%)
+                    const basicCuantiaFactor = 0.40;
+                    const incrementFactor = 0.0245;
 
-                    // 1. Cálculo de Cuantía Básica
                     let basicCuantiaDaily = averageDailySalary * basicCuantiaFactor;
-                    
-                    // 2. Aplicar el 11% de aumento del decreto de 2004 solo a la Cuantía Básica
-                    basicCuantiaDaily *= 1.11; // Suma el 11%
+                    basicCuantiaDaily *= 1.11;
 
-                    // 3. Cálculo del Incremento Anual
                     const weeksAbove500 = weeksQuoted > 500 ? weeksQuoted - 500 : 0;
-                    const incrementPer52Weeks = Math.floor(weeksAbove500 / 52); // Bloques completos de 52 semanas
+                    const incrementPer52Weeks = Math.floor(weeksAbove500 / 52);
                     const annualIncrementDaily = averageDailySalary * incrementFactor * incrementPer52Weeks;
                     
-                    // 4. Suma de Cuantía Básica y Incremento Anual (diario)
                     let totalPensionDaily = basicCuantiaDaily + annualIncrementDaily;
                     
-                    // 5. Aplicar porcentaje por edad
                     let agePercentage;
                     if (currentAge >= 65) {
-                        agePercentage = 1.00; // 100%
+                        agePercentage = 1.00;
                     } else if (currentAge === 64) {
-                        agePercentage = 0.95; // 95%
+                        agePercentage = 0.95;
                     } else if (currentAge === 63) {
-                        agePercentage = 0.90; // 90%
+                        agePercentage = 0.90;
                     } else if (currentAge === 62) {
-                        agePercentage = 0.85; // 85%
+                        agePercentage = 0.85;
                     } else if (currentAge === 61) {
-                        agePercentage = 0.80; // 80%
+                        agePercentage = 0.80;
                     } else { // currentAge === 60
-                        agePercentage = 0.75; // 75%
+                        agePercentage = 0.75;
                     }
 
                     const finalDailyPensionBeforeAssignments = totalPensionDaily * agePercentage;
                     let finalMonthlyPension = finalDailyPensionBeforeAssignments * 30.4;
                     
-                    // 6. Aplicar asignaciones familiares
                     let assignmentsPercentage = 0;
                     const pensionType = document.querySelector('input[name="pensionType"]:checked').value;
                     let pensionTypeText = '';
 
                     if (pensionType === 'individual') {
                         assignmentsPercentage = 0;
-                        pensionTypeText = 'Individual (para el trabajador)';
+                        pensionTypeText = 'Sólo para el trabajador';
                     } else if (pensionType === 'spouse') {
-                        assignmentsPercentage = 0.15; // 15% por esposa
-                        pensionTypeText = 'Trabajador y esposa';
+                        assignmentsPercentage = 0;
+                        pensionTypeText = 'Para trabajador y esposa';
                     } else if (pensionType === 'children') {
                         const numChildren = parseInt(document.getElementById('numChildren').value);
-                        assignmentsPercentage = 0.15 + (numChildren * 0.10); // 15% esposa + 10% por cada hijo
-                        pensionTypeText = `Trabajador, esposa e ${numChildren} hijo(s)`;
+                        // Se elimina el 15% por la esposa, solo se mantiene el 10% por hijo
+                        assignmentsPercentage = (numChildren * 0.10);
+                        pensionTypeText = `Para trabajador, esposa e ${numChildren} hijo(s)`;
                     }
                     
                     const assignmentAmount = finalMonthlyPension * assignmentsPercentage;
                     const finalPensionWithAssignments = finalMonthlyPension + assignmentAmount;
 
-                    // --- Cálculo del Porcentaje por Semanas Cotizadas (para mostrar) ---
-                    // Base mínima: 25% por 500 semanas
-                    // Escala progresiva: 1% por cada 10 semanas adicionales, hasta 100% (a 1250 semanas)
                     let weeksContributionPercentage = 0;
                     if (weeksQuoted >= 500) {
-                        weeksContributionPercentage = 25; // 25% por las primeras 500 semanas
+                        weeksContributionPercentage = 25;
                         const remainingWeeks = weeksQuoted - 500;
-                        const additionalPercentage = Math.floor(remainingWeeks / 10); // 1% por cada 10 semanas adicionales
+                        const additionalPercentage = Math.floor(remainingWeeks / 10);
                         weeksContributionPercentage += additionalPercentage;
-                        weeksContributionPercentage = Math.min(weeksContributionPercentage, 100); // Tope del 100%
+                        weeksContributionPercentage = Math.min(weeksContributionPercentage, 100);
                     }
 
                     // --- Display results ---
                     outputElements.type.textContent = pensionTypeText;
                     outputElements.weeks.textContent = weeksQuoted;
-                    outputElements.weeksPercentage.textContent = `${weeksContributionPercentage}%`; // Mostrar el nuevo porcentaje
+                    outputElements.weeksPercentage.textContent = `${weeksContributionPercentage}%`;
                     outputElements.averageSalary.textContent = `$${(averageMonthlySalary).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                    outputElements.percentage.textContent = `${(agePercentage * 100).toFixed(0)}%`; // Porcentaje por edad
+                    outputElements.percentage.textContent = `${(agePercentage * 100).toFixed(0)}%`;
                     outputElements.totalPension.textContent = `$${(finalPensionWithAssignments).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
                 } catch (error) {
                     console.error("Error during pension calculation:", error);
@@ -477,14 +523,12 @@
                 doc.text('Datos de la simulación:', 20, yPos);
                 yPos += 10;
 
-                // Add Personal Info
                 const nombre = document.getElementById('nombre').value;
                 const apellidoPaterno = document.getElementById('apellidoPaterno').value;
                 const apellidoMaterno = document.getElementById('apellidoMaterno').value;
                 doc.text(`Nombre: ${nombre} ${apellidoPaterno} ${apellidoMaterno}`, 20, yPos);
                 yPos += 10;
 
-                // Add Input Values
                 const yearJoined = document.getElementById('yearJoined').value;
                 const currentAge = document.getElementById('currentAge').value;
                 const weeksQuoted = document.getElementById('weeksQuoted').value;
@@ -494,11 +538,9 @@
                 yPos += 7;
                 doc.text(`Semanas Cotizadas: ${weeksQuoted}`, 20, yPos);
                 yPos += 7;
-                // Add Weeks Percentage to PDF
                 doc.text(`Porcentaje por Semanas Cotizadas: ${outputElements.weeksPercentage.textContent}`, 20, yPos);
                 yPos += 15;
 
-                // Add Salary Data
                 doc.text('Salario promedio de los últimos 5 años:', 20, yPos);
                 yPos += 7;
                 for (let i = 1; i <= 5; i++) {
@@ -509,7 +551,6 @@
                 }
                 yPos += 10;
 
-                // Add Simulation Results
                 doc.setFontSize(14);
                 doc.setTextColor('#006847');
                 doc.text('Resultados de la Simulación', 20, yPos);
@@ -521,7 +562,7 @@
                 yPos += 7;
                 doc.text(`Semanas Cotizadas: ${outputElements.weeks.textContent}`, 20, yPos);
                 yPos += 7;
-                doc.text(`Porcentaje por Semanas Cotizadas: ${outputElements.weeksPercentage.textContent}`, 20, yPos); // Duplicado para PDF
+                doc.text(`Porcentaje por Semanas Cotizadas: ${outputElements.weeksPercentage.textContent}`, 20, yPos);
                 yPos += 7;
                 doc.text(`Salario Promedio Mensual: ${outputElements.averageSalary.textContent}`, 20, yPos);
                 yPos += 7;
@@ -530,22 +571,107 @@
                 doc.text(`Importe de Pensión: ${outputElements.totalPension.textContent}`, 20, yPos);
                 yPos += 15;
 
-                // Final note
                 doc.setFontSize(10);
                 doc.text('NOTA: Este cálculo es una simulación basada en la Ley del IMSS de 1973 y no tiene validez oficial.', 20, yPos);
                 
                 doc.save('simulacion_pension_IMSS_Ley73.pdf');
             });
 
-            // Dummy function for CSV button
+            // --- CSV Generation Functionality ---
             document.getElementById('generateCsvBtn').addEventListener('click', function() {
-                alert('La funcionalidad para generar CSV no está disponible en esta simulación.');
+                if (!pensionForm.checkValidity()) {
+                    alert('Por favor, complete todos los campos antes de generar el archivo CSV.');
+                    return;
+                }
+                
+                // 1. Collect all data
+                const nombre = document.getElementById('nombre').value;
+                const apellidoPaterno = document.getElementById('apellidoPaterno').value;
+                const apellidoMaterno = document.getElementById('apellidoMaterno').value;
+                const yearJoined = document.getElementById('yearJoined').value;
+                const currentAge = document.getElementById('currentAge').value;
+                const weeksQuoted = document.getElementById('weeksQuoted').value;
+                const pensionType = outputElements.type.textContent;
+                const numChildren = document.getElementById('numChildren').value;
+
+                let yearSalaries = '';
+                for (let i = 1; i <= 5; i++) {
+                    const year = document.getElementById(`year${i}`).value;
+                    const salary = document.getElementById(`salary${i}`).value.replace(/,/g, '');
+                    yearSalaries += `${year}|${salary}|`;
+                }
+                yearSalaries = yearSalaries.slice(0, -1); // Remove last separator
+
+                const weeksPercentage = outputElements.weeksPercentage.textContent;
+                const averageSalary = outputElements.averageSalary.textContent.replace(/\$/g, '').replace(/,/g, '');
+                const agePercentage = outputElements.percentage.textContent;
+                const totalPension = outputElements.totalPension.textContent.replace(/\$/g, '').replace(/,/g, '');
+
+                // 2. Create CSV Header and Data Rows with '|' delimiter
+                const headers = [
+                    "Nombre",
+                    "ApellidoPaterno",
+                    "ApellidoMaterno",
+                    "AnioIngresoIMSS",
+                    "EdadActual",
+                    "SemanasCotizadas",
+                    "TipoPension",
+                    "NumHijos",
+                    "Anio1",
+                    "Salario1",
+                    "Anio2",
+                    "Salario2",
+                    "Anio3",
+                    "Salario3",
+                    "Anio4",
+                    "Salario4",
+                    "Anio5",
+                    "Salario5",
+                    "PorcentajeSemanas",
+                    "SalarioPromedioMensual",
+                    "PorcentajeEdad",
+                    "MontoPension"
+                ];
+
+                const data = [
+                    nombre,
+                    apellidoPaterno,
+                    apellidoMaterno,
+                    yearJoined,
+                    currentAge,
+                    weeksQuoted,
+                    pensionType,
+                    pensionType.includes('hijo') ? numChildren : 'N/A', // Handle numChildren conditionally
+                    ...yearSalaries.split('|'), // Spread year/salary pairs
+                    weeksPercentage,
+                    averageSalary,
+                    agePercentage,
+                    totalPension
+                ];
+                
+                const csvContent = headers.join('|') + '\n' + data.join('|');
+
+                // 3. Create Blob and trigger download
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                if (link.download !== undefined) {
+                    const url = URL.createObjectURL(blob);
+                    link.setAttribute('href', url);
+                    link.setAttribute('download', 'simulacion_pension_IMSS.csv');
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
             });
 
-            // Handle the reset button to also hide the children select
+            document.getElementById('goHomeBtn').addEventListener('click', function() {
+                window.location.href = 'index.html';
+            });
+
             document.querySelector('button[type="reset"]').addEventListener('click', () => {
                 childrenSelectGroup.style.display = 'none';
-                pensionTypeRadios[0].checked = true; // Check the first radio button
+                pensionTypeRadios[0].checked = true;
             });
         });
     </script>
