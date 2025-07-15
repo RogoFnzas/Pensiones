@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: #006847; /* IMSS Institutional Green */
             margin: 0;
             padding: 20px;
             color: #333;
@@ -291,7 +291,7 @@
                 <button type="submit" id="calculateBtn">Calcular</button>
                 <button type="button" id="generatePdfBtn">Generar PDF</button>
                 <button type="button" id="generateCsvBtn">Generar CSV</button>
-                <button type="reset">Inicializar</button>
+                <button type="button" id="resetBtn">Inicializar</button>
                 <button type="button" id="goHomeBtn">Regresar</button>
             </div>
         </form>
@@ -329,21 +329,38 @@
         window.jsPDF = window.jspdf.jsPDF;
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Populate Year and Age dropdowns
-            const currentYear = new Date().getFullYear();
             const yearJoinedSelect = document.getElementById('yearJoined');
             const currentAgeSelect = document.getElementById('currentAge');
+            const currentYear = new Date().getFullYear();
 
-            for (let i = currentYear; i >= 1950; i--) {
-                yearJoinedSelect.innerHTML += `<option value="${i}">${i}</option>`;
+            // Function to populate and set default values for dropdowns
+            function populateAndSetDefaults() {
+                // Clear existing options
+                yearJoinedSelect.innerHTML = ''; 
+                currentAgeSelect.innerHTML = ''; 
+
+                // Populate Year Joined dropdown
+                for (let i = currentYear; i >= 1950; i--) {
+                    yearJoinedSelect.innerHTML += `<option value="${i}">${i}</option>`;
+                }
+                // Set default for Year Joined
+                yearJoinedSelect.value = '1980'; 
+
+                // Populate Current Age dropdown
+                for (let i = 99; i >= 16; i--) {
+                    currentAgeSelect.innerHTML += `<option value="${i}">${i}</option>`;
+                }
+                // Set default for Current Age
+                currentAgeSelect.value = '60';
             }
-            for (let i = 99; i >= 16; i--) {
-                currentAgeSelect.innerHTML += `<option value="${i}">${i}</option>`;
-            }
+
+            // Call on DOMContentLoaded to set initial values
+            populateAndSetDefaults();
 
             // Get form and button elements
             const pensionForm = document.getElementById('pensionForm');
             const calculateBtn = document.getElementById('calculateBtn');
+            const weeksQuotedInput = document.getElementById('weeksQuoted'); 
             const yearsInput = document.querySelectorAll('.year-input');
             const salaryInputs = document.querySelectorAll('.salary-input');
             const childrenOption = document.getElementById('childrenOption');
@@ -357,6 +374,7 @@
                 percentage: document.getElementById('outputPercentage'),
                 totalPension: document.getElementById('outputTotalPension')
             };
+            const resetBtn = document.getElementById('resetBtn'); 
 
             // Show/hide number of children dropdown
             pensionTypeRadios.forEach(radio => {
@@ -400,14 +418,22 @@
 
             function calculatePension() {
                 try {
+                    // Perform general form validity check and unique years validation first
                     if (!pensionForm.checkValidity() || !validateYears()) {
                         alert('Por favor, complete todos los campos obligatorios y asegúrese de que los años sean únicos.');
                         return;
                     }
 
+                    // Validation for minimum weeks quoted (500)
+                    const weeksQuoted = parseInt(weeksQuotedInput.value);
+                    if (weeksQuoted < 500) {
+                        alert('Se requieren al menos 500 semanas cotizadas para acceder a la pensión de la Ley 73.');
+                        weeksQuotedInput.focus(); // Set focus back to the weeks input field
+                        return;
+                    }
+                    
                     const currentAge = parseInt(document.getElementById('currentAge').value);
-                    const weeksQuoted = parseInt(document.getElementById('weeksQuoted').value);
-
+                    
                     let totalSalary = 0;
                     for (let i = 1; i <= 5; i++) {
                         const salaryInput = document.getElementById(`salary${i}`);
@@ -421,10 +447,6 @@
                     const averageMonthlySalary = totalSalary / 5;
                     const averageDailySalary = averageMonthlySalary / 30.4;
 
-                    if (weeksQuoted < 500) {
-                        alert('Se requieren al menos 500 semanas cotizadas para acceder a la pensión de la Ley 73.');
-                        return;
-                    }
                     if (currentAge < 60) {
                         alert('Para pensionarse por Cesantía o Vejez, la edad mínima es de 60 años.');
                         return;
@@ -505,9 +527,11 @@
             
             // --- PDF Generation Functionality ---
             document.getElementById('generatePdfBtn').addEventListener('click', () => {
-                if (!pensionForm.checkValidity()) {
-                    alert('Por favor, complete todos los campos antes de generar el PDF.');
-                    return;
+                // Ensure calculation is performed before generating PDF
+                calculatePension(); // Call calculate to populate outputs if not already
+                if (!outputElements.totalPension.textContent) { // Check if calculation was successful
+                     alert('Por favor, realice el cálculo de la pensión antes de generar el PDF.');
+                     return;
                 }
 
                 const doc = new window.jsPDF();
@@ -579,9 +603,11 @@
 
             // --- CSV Generation Functionality ---
             document.getElementById('generateCsvBtn').addEventListener('click', function() {
-                if (!pensionForm.checkValidity()) {
-                    alert('Por favor, complete todos los campos antes de generar el archivo CSV.');
-                    return;
+                // Ensure calculation is performed before generating CSV
+                calculatePension(); // Call calculate to populate outputs if not already
+                if (!outputElements.totalPension.textContent) { // Check if calculation was successful
+                     alert('Por favor, realice el cálculo de la pensión antes de generar el archivo CSV.');
+                     return;
                 }
                 
                 // 1. Collect all data
@@ -665,13 +691,29 @@
                 }
             });
 
-            document.getElementById('goHomeBtn').addEventListener('click', function() {
-                window.location.href = 'index.html';
+            // --- Reset Button Functionality ---
+            resetBtn.addEventListener('click', () => {
+                // Clear all input fields using form.reset()
+                pensionForm.reset(); 
+
+                // Reset specific elements not covered by form.reset() or needing specific state
+                document.getElementById('childrenSelectGroup').style.display = 'none';
+                document.querySelector('input[name="pensionType"][value="individual"]').checked = true;
+
+                // Clear output section by setting textContent to empty string
+                outputElements.type.textContent = '';
+                outputElements.weeks.textContent = '';
+                outputElements.weeksPercentage.textContent = '';
+                outputElements.averageSalary.textContent = '';
+                outputElements.percentage.textContent = '';
+                outputElements.totalPension.textContent = '';
+
+                // Re-populate dropdowns and set their default values
+                populateAndSetDefaults();
             });
 
-            document.querySelector('button[type="reset"]').addEventListener('click', () => {
-                childrenSelectGroup.style.display = 'none';
-                pensionTypeRadios[0].checked = true;
+            document.getElementById('goHomeBtn').addEventListener('click', function() {
+                window.location.href = 'index.html';
             });
         });
     </script>
